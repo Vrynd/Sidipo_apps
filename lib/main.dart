@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sidipo_apps/themes/theme_apps.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,11 +11,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      debugShowCheckedModeBanner: false,
+      title: 'Sidipp Apps',
+      theme: ThemeApps.lightTheme,
+      darkTheme: ThemeApps.darkTheme,
+      themeMode: ThemeMode.system,
     );
   }
 }
