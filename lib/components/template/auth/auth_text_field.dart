@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sidipo_apps/provider/show_password_provider.dart';
 
 class AuthTextField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
-  final bool obscureText;
+  final bool isPassword; // pakai ini
   final TextInputType keyboardType;
-  final Widget? suffixIcon;
   final String? Function(String?)? validator;
 
   const AuthTextField({
     super.key,
     required this.controller,
     required this.label,
-    this.obscureText = false,
+    this.isPassword = false, // default false
     this.keyboardType = TextInputType.text,
-    this.suffixIcon,
     this.validator,
   });
 
@@ -27,22 +27,40 @@ class AuthTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final showPassword = isPassword
+        ? context.watch<ShowHidePasswordProvider>().showHide
+        : false;
+
     return TextFormField(
       controller: controller,
-      obscureText: obscureText,
+      obscureText: isPassword ? showPassword : false,
       keyboardType: keyboardType,
       textInputAction: TextInputAction.done,
       validator: validator,
       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
+        color: Theme.of(context).colorScheme.onSurface,
+      ),
       cursorColor: Theme.of(context).colorScheme.secondary,
       decoration: InputDecoration(
         labelText: label,
-        suffixIcon: suffixIcon,
+        suffixIcon: isPassword
+            ? GestureDetector(
+                onTap: () {
+                  context.read<ShowHidePasswordProvider>().showHide =
+                      !showPassword;
+                },
+                child: Icon(
+                  showPassword
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
+                  size: 24,
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
+              )
+            : null,
         labelStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: Theme.of(context).colorScheme.outline,
-            ),
+          color: Theme.of(context).colorScheme.outline,
+        ),
         enabledBorder: inputBorder(
           context,
           Theme.of(context).colorScheme.outlineVariant,
@@ -51,10 +69,7 @@ class AuthTextField extends StatelessWidget {
           context,
           Theme.of(context).colorScheme.primary,
         ),
-        errorBorder: inputBorder(
-          context,
-          Theme.of(context).colorScheme.error,
-        ),
+        errorBorder: inputBorder(context, Theme.of(context).colorScheme.error),
         focusedErrorBorder: inputBorder(
           context,
           Theme.of(context).colorScheme.error,

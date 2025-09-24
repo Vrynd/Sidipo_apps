@@ -67,12 +67,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     AuthTextField(
                       label: 'Password',
                       controller: _passwordController,
-                      obscureText: true,
-                      suffixIcon: Icon(
-                        Icons.visibility_off_outlined,
-                        size: 24,
-                        color: Theme.of(context).colorScheme.outlineVariant,
-                      ),
+                      isPassword: true,
                       keyboardType: TextInputType.visiblePassword,
                       validator: (value) =>
                           value!.isEmpty ? 'Password Tidak boleh kosong' : null,
@@ -82,11 +77,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 24),
                 AuthButton(titleButton: 'Daftar Akun', onTapButton: () {}),
                 const SizedBox(height: 24),
-                DividerOptionWidget(label: 'Atau daftar dengan',),
+                DividerOptionWidget(label: 'Atau daftar dengan'),
                 const SizedBox(height: 24),
                 AuthOptionButton(),
                 const SizedBox(height: 24),
                 AuthRedirect(
+                  pressKey: 'auth_redirect',
                   titleQuestion: 'Sudah memiliiki akun?',
                   titleAction: 'Masuk',
                   onTapRedirect: _goToLogin,

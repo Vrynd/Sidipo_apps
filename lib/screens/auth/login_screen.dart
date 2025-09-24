@@ -61,12 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     AuthTextField(
                       label: 'Password',
                       controller: _passwordController,
-                      obscureText: true,
-                      suffixIcon: Icon(
-                        Icons.visibility_off_outlined,
-                        size: 24,
-                        color: Theme.of(context).colorScheme.outlineVariant,
-                      ),
+                      isPassword: true,
                       keyboardType: TextInputType.visiblePassword,
                       validator: (value) =>
                           value!.isEmpty ? 'Password Tidak boleh kosong' : null,
@@ -74,17 +69,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 const SizedBox(height: 24),
-                ForgotPasswordWidget(onTapLink: _goToForgotPassword),
+                ForgotPasswordWidget(
+                  pressKey: 'forgot_password',
+                  onTapLink: _goToForgotPassword,
+                ),
                 const SizedBox(height: 24),
-                AuthButton(titleButton: 'Masuk', onTapButton: (){}),
+                AuthButton(titleButton: 'Masuk', onTapButton: () {}),
                 const SizedBox(height: 24),
-                DividerOptionWidget(label: 'Atau masuk dengan',),
+                DividerOptionWidget(label: 'Atau masuk dengan'),
                 const SizedBox(height: 24),
                 AuthOptionButton(),
                 const SizedBox(height: 24),
                 AuthRedirect(
                   titleQuestion: 'Belum punya akun?',
                   titleAction: 'Daftar Disini',
+                  pressKey: 'auth_redirec',
                   onTapRedirect: _goToRegister,
                 ),
               ],

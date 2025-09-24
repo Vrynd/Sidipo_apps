@@ -39,8 +39,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 const SizedBox(height: 24),
                 const AuthHero(
                   title: 'Lupa Password?',
-                  subtitle:
-                      'Masukkan email Anda untuk reset password',
+                  subtitle: 'Masukkan email Anda untuk reset password',
                 ),
                 const SizedBox(height: 24),
                 AuthForm(
@@ -60,6 +59,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 AuthRedirect(
                   titleQuestion: 'Ingat password Anda?',
                   titleAction: 'Masuk',
+                  pressKey: 'auth_redirect',
                   onTapRedirect: () => Navigator.pop(context),
                 ),
               ],

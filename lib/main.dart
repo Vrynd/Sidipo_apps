@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sidipo_apps/provider/button_press_provider.dart';
+import 'package:sidipo_apps/provider/redirect_press_provider.dart';
+import 'package:sidipo_apps/provider/show_password_provider.dart';
 import 'package:sidipo_apps/screens/auth/forgot_password_screen.dart';
 import 'package:sidipo_apps/screens/auth/login_screen.dart';
 import 'package:sidipo_apps/screens/auth/register_screen.dart';
@@ -8,7 +12,16 @@ import 'package:sidipo_apps/screens/routes/route_screen.dart';
 import 'package:sidipo_apps/themes/theme_apps.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => RedirectPressProvider()),
+        ChangeNotifierProvider(create: (context) => ButtonPressProvider()),
+        ChangeNotifierProvider(create: (context) => ShowHidePasswordProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -26,7 +39,8 @@ class MyApp extends StatelessWidget {
       routes: {
         RouteScreen.login.name: (context) => const LoginScreen(),
         RouteScreen.register.name: (context) => const RegisterScreen(),
-        RouteScreen.forgotPassword.name: (context) => const ForgotPasswordScreen(),
+        RouteScreen.forgotPassword.name: (context) =>
+            const ForgotPasswordScreen(),
         RouteScreen.home.name: (context) => const HomeScreen(),
         RouteScreen.profile.name: (context) => const ProfileScreen(),
       },
