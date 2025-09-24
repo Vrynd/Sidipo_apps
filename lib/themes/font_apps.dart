@@ -41,7 +41,7 @@ class FontApps {
 
   static TextStyle headlineSmall = _commonStyle.copyWith(
     fontSize: 24,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w600,
     height: 1.2,
     letterSpacing: 0.2,
   );
@@ -69,7 +69,7 @@ class FontApps {
 
   static TextStyle bodyLarge = _commonStyle.copyWith(
     fontSize: 16,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w400,
     height: 1.5,
   );
 
