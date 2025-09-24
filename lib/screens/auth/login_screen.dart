@@ -4,6 +4,7 @@ import 'package:sidipo_apps/components/template/auth/auth_form_.dart';
 import 'package:sidipo_apps/components/template/auth/auth_hero.dart';
 import 'package:sidipo_apps/components/template/auth/auth_option.dart';
 import 'package:sidipo_apps/components/template/auth/auth_redirect.dart';
+import 'package:sidipo_apps/components/template/auth/auth_text_field.dart';
 import 'package:sidipo_apps/components/widget/divider_option_widget.dart';
 import 'package:sidipo_apps/components/widget/forgot_password_widget.dart';
 import 'package:sidipo_apps/components/widget/scaffold_wigdet.dart';
@@ -47,8 +48,29 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 32),
                 AuthForm(
-                  emailController: _emailController,
-                  passwordController: _passwordController,
+                  fields: [
+                    AuthTextField(
+                      label: 'Email atau Username',
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) => value!.isEmpty
+                          ? 'Email atau username Tidak boleh kosong'
+                          : null,
+                    ),
+                    AuthTextField(
+                      label: 'Password',
+                      controller: _passwordController,
+                      obscureText: true,
+                      suffixIcon: Icon(
+                        Icons.visibility_off_outlined,
+                        size: 24,
+                        color: Theme.of(context).colorScheme.outlineVariant,
+                      ),
+                      keyboardType: TextInputType.visiblePassword,
+                      validator: (value) =>
+                          value!.isEmpty ? 'Password Tidak boleh kosong' : null,
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 24),
                 ForgotPasswordWidget(onTapLink: _goToForgotPassword),

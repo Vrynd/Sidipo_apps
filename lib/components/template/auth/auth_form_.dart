@@ -2,38 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:sidipo_apps/components/template/auth/auth_text_field.dart';
 
 class AuthForm extends StatelessWidget {
-  final TextEditingController emailController;
-  final TextEditingController passwordController;
+  final List<AuthTextField> fields;
+  final GlobalKey<FormState>? formKey;
 
   const AuthForm({
     super.key,
-    required this.emailController,
-    required this.passwordController,
+    required this.fields,
+    this.formKey,
   });
 
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          AuthTextField(
-            controller: emailController,
-            label: 'Email atau Username',
-            keyboardType: TextInputType.emailAddress,
-          ),
-          const SizedBox(height: 22),
-          AuthTextField(
-            controller: passwordController,
-            label: 'Password',
-            obscureText: true,
-            suffixIcon: Icon(
-              Icons.visibility_off_outlined,
-              size: 24,
-              color: Theme.of(context).colorScheme.outlineVariant,
-            ),
-            keyboardType: TextInputType.visiblePassword,
-          ),
+          for (var i = 0; i < fields.length; i++) ...[
+            fields[i],
+            if (i != fields.length - 1) const SizedBox(height: 22),
+          ]
         ],
       ),
     );

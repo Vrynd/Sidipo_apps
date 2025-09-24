@@ -6,6 +6,7 @@ class AuthTextField extends StatelessWidget {
   final bool obscureText;
   final TextInputType keyboardType;
   final Widget? suffixIcon;
+  final String? Function(String?)? validator;
 
   const AuthTextField({
     super.key,
@@ -14,6 +15,7 @@ class AuthTextField extends StatelessWidget {
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
     this.suffixIcon,
+    this.validator,
   });
 
   OutlineInputBorder inputBorder(BuildContext context, Color color) {
@@ -30,6 +32,7 @@ class AuthTextField extends StatelessWidget {
       obscureText: obscureText,
       keyboardType: keyboardType,
       textInputAction: TextInputAction.done,
+      validator: validator,
       style: Theme.of(context).textTheme.titleMedium?.copyWith(
             color: Theme.of(context).colorScheme.onSurface,
           ),
