@@ -8,6 +8,7 @@ import 'package:sidipo_apps/components/template/auth/auth_text_field.dart';
 import 'package:sidipo_apps/components/widget/divider_option_widget.dart';
 import 'package:sidipo_apps/components/widget/forgot_password_widget.dart';
 import 'package:sidipo_apps/components/widget/scaffold_wigdet.dart';
+import 'package:sidipo_apps/screens/routes/route_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -75,16 +76,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 24),
                 ForgotPasswordWidget(onTapLink: _goToForgotPassword),
                 const SizedBox(height: 24),
-                AuthButton(titleButton: 'Masuk', onTapButton: _goToRegister),
+                AuthButton(titleButton: 'Masuk', onTapButton: (){}),
                 const SizedBox(height: 24),
-                DividerOptionWidget(),
+                DividerOptionWidget(label: 'Atau masuk dengan',),
                 const SizedBox(height: 24),
                 AuthOptionButton(),
                 const SizedBox(height: 24),
                 AuthRedirect(
                   titleQuestion: 'Belum punya akun?',
-                  titleAction: 'Daftar',
-                  onTapRedirect: () {},
+                  titleAction: 'Daftar Disini',
+                  onTapRedirect: _goToRegister,
                 ),
               ],
             ),
@@ -94,7 +95,9 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _goToRegister() async {}
+  void _goToRegister() async {
+    Navigator.pushNamed(context, RouteScreen.register.name);
+  }
 
   void _goToForgotPassword() async {}
 

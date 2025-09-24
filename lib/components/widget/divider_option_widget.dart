@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DividerOptionWidget extends StatelessWidget {
-  const DividerOptionWidget({super.key});
+  final String label;
+  const DividerOptionWidget({super.key, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class DividerOptionWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(
-            'Atau masuk dengan',
+            label,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: Theme.of(context).colorScheme.outline,
             ),
