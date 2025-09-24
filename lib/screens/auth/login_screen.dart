@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   title: 'Masuk Ke Akun Anda',
                   subtitle: 'Silakan masukkan data akun Anda',
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 24),
                 AuthForm(
                   fields: [
                     AuthTextField(
@@ -99,7 +99,9 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.pushNamed(context, RouteScreen.register.name);
   }
 
-  void _goToForgotPassword() async {}
+  void _goToForgotPassword() async {
+    Navigator.pushNamed(context, RouteScreen.forgotPassword.name);
+  }
 
   @override
   void dispose() {

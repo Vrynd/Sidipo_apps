@@ -46,11 +46,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   title: 'Buat Akun Baru',
                   subtitle: 'Silakan masukkan data akun Anda',
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 24),
                 AuthForm(
                   fields: [
                     AuthTextField(
-                      label: 'Nama Lengkap',
+                      label: 'Nama lengkap Anda',
                       controller: _fullnameController,
                       keyboardType: TextInputType.name,
                       validator: (value) =>
