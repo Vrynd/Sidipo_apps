@@ -53,6 +53,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       label: 'Nama lengkap Anda',
                       controller: _fullnameController,
                       keyboardType: TextInputType.name,
+                      prefixIcon: Icons.person_outline,
                       validator: (value) =>
                           value!.isEmpty ? 'Nama Tidak boleh kosong' : null,
                     ),
@@ -60,6 +61,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       label: 'Email',
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
+                      prefixIcon: Icons.email_outlined,
                       validator: (value) => value!.isEmpty
                           ? 'Email atau username Tidak boleh kosong'
                           : null,
@@ -68,6 +70,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       label: 'Password',
                       controller: _passwordController,
                       isPassword: true,
+                      prefixIcon: Icons.lock_outline,
                       keyboardType: TextInputType.visiblePassword,
                       validator: (value) =>
                           value!.isEmpty ? 'Password Tidak boleh kosong' : null,

@@ -54,6 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       label: 'Email atau Username',
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
+                      prefixIcon: Icons.email_outlined,
                       validator: (value) => value!.isEmpty
                           ? 'Email atau username Tidak boleh kosong'
                           : null,
@@ -61,6 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     AuthTextField(
                       label: 'Password',
                       controller: _passwordController,
+                      prefixIcon: Icons.lock_outline_rounded,
                       isPassword: true,
                       keyboardType: TextInputType.visiblePassword,
                       validator: (value) =>

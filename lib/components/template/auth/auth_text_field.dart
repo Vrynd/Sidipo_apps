@@ -5,17 +5,19 @@ import 'package:sidipo_apps/provider/show_password_provider.dart';
 class AuthTextField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
-  final bool isPassword; // pakai ini
+  final bool isPassword;
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
+  final IconData? prefixIcon;
 
   const AuthTextField({
     super.key,
     required this.controller,
     required this.label,
-    this.isPassword = false, // default false
+    this.isPassword = false,
     this.keyboardType = TextInputType.text,
     this.validator,
+    this.prefixIcon,
   });
 
   OutlineInputBorder inputBorder(BuildContext context, Color color) {
@@ -43,6 +45,13 @@ class AuthTextField extends StatelessWidget {
       cursorColor: Theme.of(context).colorScheme.secondary,
       decoration: InputDecoration(
         labelText: label,
+        prefixIcon: prefixIcon != null
+            ? Icon(
+                prefixIcon,
+                color: Theme.of(context).colorScheme.outlineVariant,
+                size: 24,
+              )
+            : null,
         suffixIcon: isPassword
             ? GestureDetector(
                 onTap: () {
