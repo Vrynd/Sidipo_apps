@@ -5,11 +5,13 @@ import 'package:sidipo_apps/provider/button_press_provider.dart';
 class AuthButton extends StatelessWidget {
   final String titleButton;
   final VoidCallback onTapButton;
+  final bool isLoading;
 
   const AuthButton({
     super.key,
     required this.titleButton,
     required this.onTapButton,
+    this.isLoading = false,
   });
 
   @override
@@ -17,12 +19,18 @@ class AuthButton extends StatelessWidget {
     final isPressed = context.watch<ButtonPressProvider>().isPressed;
 
     return GestureDetector(
-      onTapDown: (_) => context.read<ButtonPressProvider>().press(),
-      onTapUp: (_) {
-        context.read<ButtonPressProvider>().release();
-        onTapButton();
+      onTapDown: (_) {
+        if (!isLoading) context.read<ButtonPressProvider>().press();
       },
-      onTapCancel: () => context.read<ButtonPressProvider>().release(),
+      onTapUp: (_) {
+        if (!isLoading) {
+          context.read<ButtonPressProvider>().release();
+          onTapButton();
+        }
+      },
+      onTapCancel: () {
+        if (!isLoading) context.read<ButtonPressProvider>().release();
+      },
       child: AnimatedScale(
         scale: isPressed ? 0.96 : 1.0,
         duration: const Duration(milliseconds: 120),
@@ -44,12 +52,21 @@ class AuthButton extends StatelessWidget {
             ],
           ),
           child: Center(
-            child: Text(
-              titleButton,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSecondary,
+            child: isLoading
+                ? SizedBox(
+                    width: 24,
+                    height: 26,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
+                  )
+                : Text(
+                    titleButton,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
                   ),
-            ),
           ),
         ),
       ),

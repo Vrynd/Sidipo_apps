@@ -27,6 +27,17 @@ class AuthTextField extends StatelessWidget {
     );
   }
 
+  List<String>? _getAutofillHints() {
+    if (isPassword) return const [AutofillHints.password];
+    if (keyboardType == TextInputType.emailAddress) {
+      return const [AutofillHints.email];
+    }
+    if (keyboardType == TextInputType.name) {
+      return const [AutofillHints.name, AutofillHints.givenName];
+    }
+    return const [];
+  }
+
   @override
   Widget build(BuildContext context) {
     final showPassword = isPassword
@@ -38,6 +49,7 @@ class AuthTextField extends StatelessWidget {
       obscureText: isPassword ? showPassword : false,
       keyboardType: keyboardType,
       textInputAction: TextInputAction.done,
+      autofillHints: _getAutofillHints(),
       validator: validator,
       style: Theme.of(context).textTheme.titleMedium?.copyWith(
         color: Theme.of(context).colorScheme.onSurface,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sidipo_apps/components/template/auth/auth_button.dart';
 import 'package:sidipo_apps/components/template/auth/auth_form_.dart';
 import 'package:sidipo_apps/components/template/auth/auth_hero.dart';
@@ -8,6 +9,9 @@ import 'package:sidipo_apps/components/template/auth/auth_text_field.dart';
 import 'package:sidipo_apps/components/widget/divider_option_widget.dart';
 import 'package:sidipo_apps/components/widget/forgot_password_widget.dart';
 import 'package:sidipo_apps/components/widget/scaffold_wigdet.dart';
+import 'package:sidipo_apps/firebase_auth_status.dart';
+import 'package:sidipo_apps/provider/firebase_auth_provider.dart';
+import 'package:sidipo_apps/provider/shared_preferences_provider.dart';
 import 'package:sidipo_apps/screens/routes/route_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -22,78 +26,143 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
+    final navigator = Navigator.of(context);
+    final isLogin = context.read<SharedPreferenceProvider>().isLogin;
+
+    Future.microtask(() async {
+      if (isLogin) {
+        await firebaseAuthProvider.updateProfile();
+        navigator.pushReplacementNamed(RouteScreen.home.name);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ScaffoldWigdet(
-      backgroundColor: Theme.of(context).colorScheme.surfaceContainerLowest,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 22),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    minWidth: 66,
-                    minHeight: 66,
-                    maxWidth: 74,
-                    maxHeight: 74,
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: ScaffoldWigdet(
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainerLowest,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 22),
+            child: SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      minWidth: 66,
+                      minHeight: 66,
+                      maxWidth: 74,
+                      maxHeight: 74,
+                    ),
+                    child: Image.asset('assets/images/wellness.png'),
                   ),
-                  child: Image.asset('assets/images/wellness.png'),
-                ),
-                const SizedBox(height: 24),
-                AuthHero(
-                  title: 'Masuk Ke Akun Anda',
-                  subtitle: 'Silakan masukkan data akun Anda',
-                ),
-                const SizedBox(height: 24),
-                AuthForm(
-                  fields: [
-                    AuthTextField(
-                      label: 'Email atau Username',
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      prefixIcon: Icons.email_outlined,
-                      validator: (value) => value!.isEmpty
-                          ? 'Email atau username Tidak boleh kosong'
-                          : null,
+                  const SizedBox(height: 24),
+                  AuthHero(
+                    title: 'Masuk Ke Akun Anda',
+                    subtitle: 'Silakan masukkan data akun Anda',
+                  ),
+                  const SizedBox(height: 24),
+                  AutofillGroup(
+                    child: AuthForm(
+                      fields: [
+                        AuthTextField(
+                          label: 'Email atau Username',
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          prefixIcon: Icons.email_outlined,
+                          validator: (value) => value!.isEmpty
+                              ? 'Email atau username Tidak boleh kosong'
+                              : null,
+                        ),
+                        AuthTextField(
+                          label: 'Password',
+                          controller: _passwordController,
+                          prefixIcon: Icons.lock_outline_rounded,
+                          isPassword: true,
+                          keyboardType: TextInputType.visiblePassword,
+                          validator: (value) => value!.isEmpty
+                              ? 'Password Tidak boleh kosong'
+                              : null,
+                        ),
+                      ],
                     ),
-                    AuthTextField(
-                      label: 'Password',
-                      controller: _passwordController,
-                      prefixIcon: Icons.lock_outline_rounded,
-                      isPassword: true,
-                      keyboardType: TextInputType.visiblePassword,
-                      validator: (value) =>
-                          value!.isEmpty ? 'Password Tidak boleh kosong' : null,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                ForgotPasswordWidget(
-                  pressKey: 'forgot_password',
-                  onTapLink: _goToForgotPassword,
-                ),
-                const SizedBox(height: 24),
-                AuthButton(titleButton: 'Masuk', onTapButton: () {}),
-                const SizedBox(height: 24),
-                DividerOptionWidget(label: 'Atau masuk dengan'),
-                const SizedBox(height: 24),
-                AuthOptionButton(),
-                const SizedBox(height: 24),
-                AuthRedirect(
-                  titleQuestion: 'Belum punya akun?',
-                  titleAction: 'Daftar Disini',
-                  pressKey: 'auth_redirec',
-                  onTapRedirect: _goToRegister,
-                ),
-              ],
+                  ),
+                  const SizedBox(height: 24),
+                  ForgotPasswordWidget(
+                    pressKey: 'forgot_password',
+                    onTapLink: _goToForgotPassword,
+                  ),
+                  const SizedBox(height: 24),
+                  Consumer<FirebaseAuthProvider>(
+                    builder: (context, value, child) {
+                      final isLoading =
+                          value.authStatus == FirebaseAuthStatus.authenticating;
+
+                      return AuthButton(
+                        titleButton: 'Masuk',
+                        onTapButton: _tapToLogin,
+                        isLoading: isLoading,
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  DividerOptionWidget(label: 'Atau masuk dengan'),
+                  const SizedBox(height: 24),
+                  AuthOptionButton(),
+                  const SizedBox(height: 24),
+                  AuthRedirect(
+                    titleQuestion: 'Belum punya akun?',
+                    titleAction: 'Daftar Disini',
+                    pressKey: 'auth_redirec',
+                    onTapRedirect: _goToRegister,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  void _tapToLogin() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isNotEmpty && password.isNotEmpty) {
+      final sharedPreferenceProvider = context.read<SharedPreferenceProvider>();
+      final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
+      final navigator = Navigator.of(context);
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+      await firebaseAuthProvider.signInUser(email, password);
+      if (firebaseAuthProvider.authStatus == FirebaseAuthStatus.authenticated) {
+        await sharedPreferenceProvider.login();
+        navigator.pushReplacementNamed(RouteScreen.home.name);
+      } else {
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text(firebaseAuthProvider.message ?? ""),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } else {
+      const message = "Masukkan email dan kata sandi dengan benar";
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+      scaffoldMessenger.showSnackBar(const SnackBar(content: Text(message)));
+    }
   }
 
   void _goToRegister() async {

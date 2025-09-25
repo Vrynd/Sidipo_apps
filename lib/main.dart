@@ -24,7 +24,6 @@ void main() async {
   final pref = await SharedPreferences.getInstance();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
   final firebaseAuth = FirebaseAuth.instance;
   runApp(
     MultiProvider(
