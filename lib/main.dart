@@ -1,5 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sidipo_apps/firebase_options.dart';
 import 'package:sidipo_apps/provider/button_press_provider.dart';
 import 'package:sidipo_apps/provider/redirect_press_provider.dart';
 import 'package:sidipo_apps/provider/show_password_provider.dart';
@@ -11,7 +14,12 @@ import 'package:sidipo_apps/screens/main/profille_screen.dart';
 import 'package:sidipo_apps/screens/routes/route_screen.dart';
 import 'package:sidipo_apps/themes/theme_apps.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final pref = await SharedPreferences.getInstance();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(
     MultiProvider(
       providers: [
