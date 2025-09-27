@@ -9,7 +9,6 @@ import 'package:sidipo_apps/provider/firebase_auth_provider.dart';
 import 'package:sidipo_apps/provider/redirect_press_provider.dart';
 import 'package:sidipo_apps/provider/shared_preferences_provider.dart';
 import 'package:sidipo_apps/provider/show_password_provider.dart';
-import 'package:sidipo_apps/screens/auth/forgot_password_screen.dart';
 import 'package:sidipo_apps/screens/auth/login_screen.dart';
 import 'package:sidipo_apps/screens/auth/register_screen.dart';
 import 'package:sidipo_apps/screens/main/home_screen.dart';
@@ -47,6 +46,7 @@ void main() async {
     ),
   );
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -62,8 +62,6 @@ class MyApp extends StatelessWidget {
       routes: {
         RouteScreen.login.name: (context) => const LoginScreen(),
         RouteScreen.register.name: (context) => const RegisterScreen(),
-        RouteScreen.forgotPassword.name: (context) =>
-            const ForgotPasswordScreen(),
         RouteScreen.home.name: (context) => const HomeScreen(),
         RouteScreen.profile.name: (context) => const ProfileScreen(),
       },

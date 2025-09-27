@@ -6,8 +6,8 @@ import 'package:sidipo_apps/components/template/auth/auth_hero.dart';
 import 'package:sidipo_apps/components/template/auth/auth_option.dart';
 import 'package:sidipo_apps/components/template/auth/auth_redirect.dart';
 import 'package:sidipo_apps/components/template/auth/auth_text_field.dart';
+import 'package:sidipo_apps/components/template/auth/auth_validate_form.dart';
 import 'package:sidipo_apps/components/widget/divider_option_widget.dart';
-import 'package:sidipo_apps/components/widget/forgot_password_widget.dart';
 import 'package:sidipo_apps/components/widget/scaffold_wigdet.dart';
 import 'package:sidipo_apps/firebase_auth_status.dart';
 import 'package:sidipo_apps/provider/firebase_auth_provider.dart';
@@ -24,10 +24,12 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
+
     final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
     final navigator = Navigator.of(context);
     final isLogin = context.read<SharedPreferenceProvider>().isLogin;
@@ -75,33 +77,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 24),
                   AutofillGroup(
                     child: AuthForm(
+                      formKey: _formKey,
                       fields: [
                         AuthTextField(
-                          label: 'Email atau Username',
+                          label: 'Email',
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
                           prefixIcon: Icons.email_outlined,
-                          validator: (value) => value!.isEmpty
-                              ? 'Email atau username Tidak boleh kosong'
-                              : null,
+                          validator: AuthValidate.validateEmail,
                         ),
                         AuthTextField(
                           label: 'Password',
                           controller: _passwordController,
-                          prefixIcon: Icons.lock_outline_rounded,
                           isPassword: true,
+                          prefixIcon: Icons.lock_outline,
                           keyboardType: TextInputType.visiblePassword,
-                          validator: (value) => value!.isEmpty
-                              ? 'Password Tidak boleh kosong'
-                              : null,
+                          validator: AuthValidate.validatePassword,
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  ForgotPasswordWidget(
-                    pressKey: 'forgot_password',
-                    onTapLink: _goToForgotPassword,
                   ),
                   const SizedBox(height: 24),
                   Consumer<FirebaseAuthProvider>(
@@ -137,40 +131,31 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _tapToLogin() async {
+    if (!_formKey.currentState!.validate()) return;
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
-    if (email.isNotEmpty && password.isNotEmpty) {
-      final sharedPreferenceProvider = context.read<SharedPreferenceProvider>();
-      final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
-      final navigator = Navigator.of(context);
-      final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final sharedPreferenceProvider = context.read<SharedPreferenceProvider>();
+    final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
+    final navigator = Navigator.of(context);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
 
-      await firebaseAuthProvider.signInUser(email, password);
-      if (firebaseAuthProvider.authStatus == FirebaseAuthStatus.authenticated) {
-        await sharedPreferenceProvider.login();
-        navigator.pushReplacementNamed(RouteScreen.home.name);
-      } else {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text(firebaseAuthProvider.message ?? ""),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+    await firebaseAuthProvider.signInUser(email, password);
+    if (firebaseAuthProvider.authStatus == FirebaseAuthStatus.authenticated) {
+      await sharedPreferenceProvider.login();
+      navigator.pushReplacementNamed(RouteScreen.home.name);
     } else {
-      const message = "Masukkan email dan kata sandi dengan benar";
-      final scaffoldMessenger = ScaffoldMessenger.of(context);
-      scaffoldMessenger.showSnackBar(const SnackBar(content: Text(message)));
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Text(firebaseAuthProvider.message ?? "Terjadi kesalahan"),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 
   void _goToRegister() async {
-    Navigator.pushNamed(context, RouteScreen.register.name);
-  }
-
-  void _goToForgotPassword() async {
-    Navigator.pushNamed(context, RouteScreen.forgotPassword.name);
+    Navigator.pushReplacementNamed(context, RouteScreen.register.name);
   }
 
   @override

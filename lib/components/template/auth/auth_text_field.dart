@@ -8,6 +8,7 @@ class AuthTextField extends StatelessWidget {
   final bool isPassword;
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
   final IconData? prefixIcon;
 
   const AuthTextField({
@@ -17,6 +18,7 @@ class AuthTextField extends StatelessWidget {
     this.isPassword = false,
     this.keyboardType = TextInputType.text,
     this.validator,
+    this.onChanged,
     this.prefixIcon,
   });
 
@@ -45,12 +47,14 @@ class AuthTextField extends StatelessWidget {
         : false;
 
     return TextFormField(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       controller: controller,
       obscureText: isPassword ? showPassword : false,
       keyboardType: keyboardType,
       textInputAction: TextInputAction.done,
       autofillHints: _getAutofillHints(),
       validator: validator,
+      onChanged: onChanged,
       style: Theme.of(context).textTheme.titleMedium?.copyWith(
         color: Theme.of(context).colorScheme.onSurface,
       ),
@@ -94,6 +98,10 @@ class AuthTextField extends StatelessWidget {
         focusedErrorBorder: inputBorder(
           context,
           Theme.of(context).colorScheme.error,
+        ),
+
+        errorStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+          color: Theme.of(context).colorScheme.error,
         ),
       ),
     );
