@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sidipo_apps/components/template/auth/auth_button.dart';
 import 'package:sidipo_apps/components/template/auth/auth_form_.dart';
 import 'package:sidipo_apps/components/template/auth/auth_hero.dart';
 import 'package:sidipo_apps/components/template/auth/auth_redirect.dart';
 import 'package:sidipo_apps/components/template/auth/auth_text_field.dart';
 import 'package:sidipo_apps/components/widget/scaffold_wigdet.dart';
+import 'package:sidipo_apps/firebase_auth_status.dart';
+import 'package:sidipo_apps/provider/firebase_auth_provider.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -48,13 +51,24 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       label: 'Email',
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      validator: (value) =>
-                          value!.isEmpty ? 'Email tidak boleh kosong' : null,
+                      prefixIcon: Icons.email_outlined,
+                      autofillHints: const [AutofillHints.email],
                     ),
                   ],
                 ),
                 const SizedBox(height: 24),
-                AuthButton(titleButton: 'Reset Password', onTapButton: () {}),
+                Consumer<FirebaseAuthProvider>(
+                  builder: (context, value, child) {
+                    final isLoading =
+                        value.authStatus ==
+                        FirebaseAuthStatus.resettingPassword;
+                    return AuthButton(
+                      titleButton: 'Reset Password',
+                      onTapButton: _tapToReset,
+                      isLoading: isLoading,
+                    );
+                  },
+                ),
                 const SizedBox(height: 24),
                 AuthRedirect(
                   titleQuestion: 'Ingat password Anda?',
@@ -68,6 +82,55 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         ),
       ),
     );
+  }
+
+  void _tapToReset() async {
+    final email = _emailController.text.trim();
+    final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+
+    if (email.isEmpty) {
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text(
+            "Masukkan email anda dengan benar",
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+        ),
+      );
+      return;
+    }
+
+    await firebaseAuthProvider.resetPassword(email);
+
+    if (!mounted) return;
+
+    if (firebaseAuthProvider.authStatus ==
+        FirebaseAuthStatus.passwordResetEmailSent) {
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text(
+            firebaseAuthProvider.message ??
+                "Cek email Anda untuk reset password",
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+        ),
+      );
+      navigator.pop();
+    } else if (firebaseAuthProvider.authStatus == FirebaseAuthStatus.error) {
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text(
+            firebaseAuthProvider.message ?? "Terjadi kesalahan",
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+        ),
+      );
+    }
   }
 
   @override

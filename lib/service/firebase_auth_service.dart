@@ -81,6 +81,10 @@ class FirebaseAuthService {
     }
   }
 
+  Future<void> resetPassword(String email) async {
+    await _auth.sendPasswordResetEmail(email: email);
+  }
+
   Future<UserProfile?> getProfile(String uid) async {
     try {
       final snapshot = await _firestore.collection("users").doc(uid).get();

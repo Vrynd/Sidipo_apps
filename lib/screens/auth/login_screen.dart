@@ -150,7 +150,10 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         scaffoldMessenger.showSnackBar(
           SnackBar(
-            content: Text(firebaseAuthProvider.message ?? "Terjadi Kesalahan"),
+            content: Text(
+              firebaseAuthProvider.message ?? "Terjadi Kesalahan",
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
             behavior: SnackBarBehavior.floating,
           ),
         );

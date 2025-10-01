@@ -4,6 +4,8 @@ enum FirebaseAuthStatus {
   authenticated,
   authenticating,
   signingOut,
+  resettingPassword,
+  passwordResetEmailSent,
   unauthenticated,
   error,
 }

@@ -50,6 +50,21 @@ class FirebaseAuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future resetPassword(String email) async {
+    try {
+      _authStatus = FirebaseAuthStatus.resettingPassword;
+      notifyListeners();
+
+      await _service.resetPassword(email);
+      _authStatus = FirebaseAuthStatus.passwordResetEmailSent;
+      _message = "Link reset password sudah dikirim ke $email";
+    } catch (e) {
+      _message = e.toString();
+      _authStatus = FirebaseAuthStatus.error;
+    }
+    notifyListeners();
+  }
+
   Future signOutUser() async {
     try {
       _authStatus = FirebaseAuthStatus.signingOut;
