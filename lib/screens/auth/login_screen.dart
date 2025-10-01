@@ -83,6 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
                           prefixIcon: Icons.email_outlined,
+                          autofillHints: const [AutofillHints.email],
                         ),
                         AuthTextField(
                           label: 'Password',
@@ -90,6 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           isPassword: true,
                           prefixIcon: Icons.lock_outline,
                           keyboardType: TextInputType.visiblePassword,
+                          autofillHints: const [AutofillHints.password],
                         ),
                       ],
                     ),
@@ -99,6 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     pressKey: 'forgot_password',
                     onTapLink: _goToForgotPassword,
                   ),
+                  const SizedBox(height: 24),
                   Consumer<FirebaseAuthProvider>(
                     builder: (context, value, child) {
                       final isLoading =

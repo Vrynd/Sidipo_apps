@@ -64,12 +64,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           controller: _fullnameController,
                           keyboardType: TextInputType.name,
                           prefixIcon: Icons.person_outline,
+                          autofillHints: const [AutofillHints.name],
                         ),
                         AuthTextField(
                           label: 'Email',
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
                           prefixIcon: Icons.email_outlined,
+                          autofillHints: const [AutofillHints.email],
                         ),
                         AuthTextField(
                           label: 'Password',
@@ -77,6 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           isPassword: true,
                           prefixIcon: Icons.lock_outline,
                           keyboardType: TextInputType.visiblePassword,
+                          autofillHints: const [AutofillHints.newPassword],
                         ),
                       ],
                     ),

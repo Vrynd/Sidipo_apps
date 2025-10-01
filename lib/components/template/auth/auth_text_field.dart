@@ -9,6 +9,7 @@ class AuthTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
   final IconData? prefixIcon;
+  final List<String>? autofillHints;
 
   const AuthTextField({
     super.key,
@@ -18,6 +19,7 @@ class AuthTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.validator,
     this.prefixIcon,
+    this.autofillHints,
   });
 
   OutlineInputBorder inputBorder(BuildContext context, Color color) {
@@ -25,17 +27,6 @@ class AuthTextField extends StatelessWidget {
       borderRadius: BorderRadius.circular(14),
       borderSide: BorderSide(color: color, width: 1.4),
     );
-  }
-
-  List<String>? _getAutofillHints() {
-    if (isPassword) return const [AutofillHints.password];
-    if (keyboardType == TextInputType.emailAddress) {
-      return const [AutofillHints.email];
-    }
-    if (keyboardType == TextInputType.name) {
-      return const [AutofillHints.name, AutofillHints.givenName];
-    }
-    return const [];
   }
 
   @override
@@ -49,7 +40,7 @@ class AuthTextField extends StatelessWidget {
       obscureText: isPassword ? showPassword : false,
       keyboardType: keyboardType,
       textInputAction: TextInputAction.done,
-      autofillHints: _getAutofillHints(),
+      autofillHints: autofillHints,
       validator: validator,
       style: Theme.of(context).textTheme.titleMedium?.copyWith(
         color: Theme.of(context).colorScheme.onSurface,
