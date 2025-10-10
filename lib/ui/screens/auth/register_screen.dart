@@ -90,7 +90,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return AuthButton(
                         textAction: 'Daftar Sekarang',
                         isLoading: isLoading,
-                        onPressed: () {},
+                        onPressed: _tapToRegister,
                       );
                     },
                   ),
@@ -127,7 +127,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+  void _tapToRegister() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    final fullname = _fullnameController.text.trim();
+    if (email.isNotEmpty && password.isNotEmpty) {
+      final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
+      final navigator = Navigator.of(context);
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+      await firebaseAuthProvider.createAccount(fullname, email, password);
+      if (firebaseAuthProvider.authStatus ==
+          FirebaseAuthStatus.accountCreated) {
+        navigator.pop();
+      } else {
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text(
+              firebaseAuthProvider.message ?? "",
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } else {
+      const message = "Masukkan nama, email dan password dengan benar";
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text(message, style: Theme.of(context).textTheme.bodyLarge),
+        ),
+      );
+    }
+  }
+
   void _goToLogin() {
     Navigator.pop(context);
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _fullnameController.dispose();
+    super.dispose();
   }
 }
