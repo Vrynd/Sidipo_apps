@@ -19,9 +19,9 @@ android {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
-    defaultConfig {.
+    defaultConfig {
         applicationId = "com.example.posyandu_digital_app"
-        minSdk = 23
+        minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -40,6 +40,6 @@ flutter {
 }
 
 dependencies {
-    implementation "androidx.multidex:multidex:2.0.1"
+    implementation("androidx.multidex:multidex:2.0.1")
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
 }

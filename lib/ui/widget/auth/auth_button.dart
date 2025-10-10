@@ -22,7 +22,7 @@ class AuthButton extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           gradient: const LinearGradient(
-            colors: [Color(0xFF1565C0), Color(0xFF42A5F5)],
+            colors: [Color(0xFF1C6585), Color(0xFF62B6CB)],
           ),
         ),
         child: isLoading
@@ -36,8 +36,9 @@ class AuthButton extends StatelessWidget {
               )
             : Text(
                 textAction,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
+                  fontSize: 20,
                   color: Theme.of(context).colorScheme.surface,
                 ),
               ),
