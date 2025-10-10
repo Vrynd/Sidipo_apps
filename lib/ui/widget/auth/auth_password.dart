@@ -44,9 +44,9 @@ class AuthPassword extends StatelessWidget {
               GestureDetector(
                 onTap: onForgotPassword,
                 child: Text(
-                  'Lupa password?',
+                  'Lupa Password?',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                     fontSize: 18,
                     color: Theme.of(context).colorScheme.primary,
                   ),

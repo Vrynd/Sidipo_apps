@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:posyandu_digital_app/firebase_auth_status.dart';
 import 'package:posyandu_digital_app/provider/firebase_auth_provider.dart';
+import 'package:posyandu_digital_app/routes/navigation.dart';
 import 'package:posyandu_digital_app/ui/custom/app_bar_custom.dart';
 import 'package:posyandu_digital_app/ui/custom/bottom_bar_custom.dart';
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
@@ -66,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       textInputAction: TextInputAction.done,
                       autofillHints: const [AutofillHints.password],
                       onChanged: (value) {},
-                      onForgotPassword: () {},
+                      onForgotPassword: _goToResetPassword,
                     ),
                   ),
                   SizedBox(height: 32),
@@ -74,7 +75,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     builder: (context, value, child) {
                       final isLoading =
                           value.authStatus == FirebaseAuthStatus.authenticating;
-
                       return AuthButton(
                         textAction: 'Masuk Ke Akun',
                         isLoading: isLoading,
@@ -109,9 +109,18 @@ class _LoginScreenState extends State<LoginScreen> {
         bottomNavigationBar: BottomBarCustom(
           text: 'Belum punya akun?',
           actionText: 'Daftar Sekarang',
-          onTap: () {},
+          onTap: _goToRegister,
         ),
       ),
     );
   }
+
+  void _goToRegister() async {
+    Navigator.pushNamed(context, RouteScreen.register.name);
+  }
+
+  void _goToResetPassword() async {
+    Navigator.pushNamed(context, RouteScreen.forgotPassword.name);
+  }
+
 }

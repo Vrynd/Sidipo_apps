@@ -8,7 +8,9 @@ import 'package:posyandu_digital_app/routes/navigation.dart';
 import 'package:posyandu_digital_app/service/firebase_auth_service.dart';
 import 'package:posyandu_digital_app/service/shared_preference_service.dart';
 import 'package:posyandu_digital_app/themes/theme.apps.dart';
+import 'package:posyandu_digital_app/ui/screens/auth/forgot_password_screen.dart';
 import 'package:posyandu_digital_app/ui/screens/auth/login_screen.dart';
+import 'package:posyandu_digital_app/ui/screens/auth/register_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -50,7 +52,12 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeApps.darkTheme,
       themeMode: ThemeMode.system,
       initialRoute: RouteScreen.login.name,
-      routes: {RouteScreen.login.name: (context) => const LoginScreen()},
+      routes: {
+        RouteScreen.login.name: (context) => const LoginScreen(),
+        RouteScreen.register.name: (context) => const RegisterScreen(),
+        RouteScreen.forgotPassword.name: (context) =>
+            const ForgotPasswordScreen(),
+      },
     );
   }
 }

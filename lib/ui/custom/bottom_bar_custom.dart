@@ -16,12 +16,13 @@ class BottomBarCustom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
+      height: 65,
       color: Theme.of(context).colorScheme.surface,
       child: Center(
         child: RichText(
           text: TextSpan(
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface,
+              color: Theme.of(context).colorScheme.outline,
             ),
             children: [
               TextSpan(text: '$text '),
@@ -29,7 +30,7 @@ class BottomBarCustom extends StatelessWidget {
                 text: actionText,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                 ),
                 recognizer: TapGestureRecognizer()..onTap = onTap,
               ),
