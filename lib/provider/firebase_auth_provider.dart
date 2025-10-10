@@ -59,7 +59,7 @@ class FirebaseAuthProvider extends ChangeNotifier {
 
       await _service.resetPassword(email);
       _authStatus = FirebaseAuthStatus.passwordResetEmailSent;
-      _message = "Link reset kata sandi sudah dikirim ke email anda";
+      _message = "Link reset password sudah dikirim ke email anda";
     } catch (e) {
       _message = e is String ? e : e.toString();
       _authStatus = FirebaseAuthStatus.error;
