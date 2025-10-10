@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "957970938061",
+    "project_id": "sidipo-apps-d215e",
+    "storage_bucket": "sidipo-apps-d215e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:957970938061:android:30f3dc070231ba6b95d184",
+        "android_client_info": {
+          "package_name": "com.example.posyandu_digital_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1oJn3dTuX7ozcZMIX3ToB7YVp2vJ5XSw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
