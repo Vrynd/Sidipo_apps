@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:posyandu_digital_app/firebase_options.dart';
 import 'package:posyandu_digital_app/provider/firebase_auth_provider.dart';
 import 'package:posyandu_digital_app/provider/shared_preference_provider.dart';
+import 'package:posyandu_digital_app/routes/navigation.dart';
 import 'package:posyandu_digital_app/service/firebase_auth_service.dart';
 import 'package:posyandu_digital_app/service/shared_preference_service.dart';
 import 'package:posyandu_digital_app/themes/theme.apps.dart';
+import 'package:posyandu_digital_app/ui/screens/auth/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,9 +29,8 @@ void main() async {
         ),
         Provider(create: (context) => SharedPreferenceService(pref)),
         ChangeNotifierProvider(
-          create: (context) => SharedPreferenceProvider(
-            context.read<SharedPreferenceService>(),
-          ),
+          create: (context) =>
+              SharedPreferenceProvider(context.read<SharedPreferenceService>()),
         ),
       ],
       child: MyApp(),
@@ -48,6 +49,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeApps.lightTheme,
       darkTheme: ThemeApps.darkTheme,
       themeMode: ThemeMode.system,
+      initialRoute: RouteScreen.login.name,
+      routes: {RouteScreen.login.name: (context) => const LoginScreen()},
     );
   }
 }
