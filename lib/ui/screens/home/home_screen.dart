@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:posyandu_digital_app/firebase_auth_status.dart';
 import 'package:posyandu_digital_app/provider/firebase_auth_provider.dart';
-import 'package:posyandu_digital_app/provider/shared_preference_provider.dart';
-import 'package:posyandu_digital_app/routes/navigation.dart';
+import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
+import 'package:posyandu_digital_app/ui/widget/main/banner_app.dart';
+import 'package:posyandu_digital_app/ui/widget/main/feature_app.dart';
+import 'package:posyandu_digital_app/ui/widget/main/header_app.dart';
+import 'package:posyandu_digital_app/ui/widget/main/health_service_app.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,93 +15,151 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _contentController = TextEditingController();
-  final _padding = const EdgeInsets.symmetric(vertical: 4, horizontal: 8);
+  final ScrollController _scrollController = ScrollController();
+  bool _isScrolling = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController.addListener(() {
+      if (_scrollController.offset > 0 && !_isScrolling) {
+        setState(() => _isScrolling = true);
+      } else if (_scrollController.offset <= 0 && _isScrolling) {
+        setState(() => _isScrolling = false);
+      }
+    });
+  }
+
+  String? _cachedUsername;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final profile = context.read<FirebaseAuthProvider>().profile;
+    if (profile != null && profile.fullname != null) {
+      _cachedUsername = profile.fullname!;
+    }
+  }
+
+  String _getUsername() {
+    final fullname = _cachedUsername ?? "User";
+    final parts = fullname.split(" ");
+    if (parts.length == 1) {
+      return parts.first;
+    } else if (parts.length > 1) {
+      return "${parts[0]} ${parts[1]}";
+    }
+    return "User";
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldCustom(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        title: const Text('Chat Room'),
-        actions: [
-          Consumer<FirebaseAuthProvider>(
-            builder: (context, value, child) {
-              return switch (value.authStatus) {
-                FirebaseAuthStatus.signingOut => const Center(
-                  child: CircularProgressIndicator(),
-                ),
-                _ => IconButton(
-                  icon: const Icon(Icons.close),
-                  tooltip: 'Logout',
-                  onPressed: () => _tapToSignOut(context),
-                ),
-              };
-            },
+        centerTitle: true,
+        scrolledUnderElevation: 0,
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        title: AnimatedOpacity(
+          duration: const Duration(milliseconds: 300),
+          opacity: _isScrolling ? 1.0 : 0.0,
+          child: Text(
+            'Sidipo Apps'.toUpperCase(),
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ),
+      ),
+      body: ListView(
+        controller: _scrollController,
+        padding: EdgeInsets.only(top: 0, left: 22, right: 22, bottom: 100),
+        children: [
+          HeaderApp(username: _getUsername(), onAvatarTap: () {}),
+          const SizedBox(height: 14),
+
+          BannerApp(imagePath: 'assets/image/banner_posyandu.jpg'),
+          FeatureApp(
+            items: [
+              FeatureItem(
+                icon: Icons.smartphone_outlined,
+                title: 'Akses lebih Mudah',
+              ),
+              FeatureItem(
+                icon: Icons.bolt_outlined,
+                title: 'Cepat dan Efisien',
+              ),
+              FeatureItem(
+                icon: Icons.health_and_safety_outlined,
+                title: 'Hidup lebih Sehat',
+              ),
+            ],
+          ),
+          const SizedBox(height: 30),
+
+          Text(
+            'Sasaran Pelayanan',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 14),
+          HealthServiceApp(
+            items: [
+              ServiceItem(
+                icon: Icons.pregnant_woman_outlined,
+                title: 'Ibu Hamil dan Nifas',
+                time: '08.00 - 16.00 WIB',
+                location: 'Balai Desa Setempat',
+                iconColor: Colors.pink.shade700,
+                backgroundColor: Colors.pink.shade100,
+              ),
+              ServiceItem(
+                icon: Icons.child_care_outlined,
+                title: 'Bayi atau Balita',
+                time: '08.00 - 16.00 WIB',
+                location: 'Balai Desa Setempat',
+                iconColor: Colors.orange.shade700,
+                backgroundColor: Colors.yellow.shade100,
+              ),
+              ServiceItem(
+                icon: Icons.school_outlined,
+                title: 'Sekolah atau Remaja',
+                time: '08.00 - 16.00 WIB',
+                location: 'Balai Desa Setempat',
+                iconColor: Colors.blue.shade700,
+                backgroundColor: Colors.blue.shade100,
+              ),
+              ServiceItem(
+                icon: Icons.work_outline,
+                title: 'Usia Produktif',
+                time: '08.00 - 16.00 WIB',
+                location: 'Balai Desa Setempat',
+                iconColor: Colors.green.shade700,
+                backgroundColor: Colors.green.shade100,
+              ),
+              ServiceItem(
+                icon: Icons.elderly,
+                title: 'Dewasa atau Lansia',
+                time: '08.00 - 16.00 WIB',
+                location: 'Balai Desa Setempat',
+                iconColor: Colors.purple.shade700,
+                backgroundColor: Colors.purple.shade100,
+              ),
+            ],
           ),
         ],
-      ),
-      body: Padding(
-        padding: _padding,
-        child: Column(
-          children: [
-            const Expanded(child: Placeholder()),
-            const SizedBox(height: 8),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _contentController,
-                    keyboardType: TextInputType.multiline,
-                    minLines: 1,
-                    maxLines: 4,
-                    decoration: InputDecoration(
-                      contentPadding: _padding,
-                      border: const OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 4),
-                DecoratedBox(
-                  decoration: ShapeDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    shape: const CircleBorder(),
-                  ),
-                  child: IconButton(
-                    icon: const Icon(Icons.send),
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    onPressed: () => _sendMessage(),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }
 
-  void _tapToSignOut(BuildContext context) async {
-    final sharedPreferenceProvider = context.read<SharedPreferenceProvider>();
-    final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
-    final navigator = Navigator.of(context);
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-
-    await firebaseAuthProvider
-        .signOutUser()
-        .then((value) async {
-          await sharedPreferenceProvider.logout();
-          navigator.pushReplacementNamed(RouteScreen.login.name);
-        })
-        .whenComplete(() {
-          scaffoldMessenger.showSnackBar(
-            SnackBar(
-              content: Text(firebaseAuthProvider.message ?? ""),
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-        });
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
-
-  void _sendMessage() async {}
 }
