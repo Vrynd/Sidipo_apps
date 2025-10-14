@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 class BannerApp extends StatelessWidget {
   final String imagePath;
   final double height;
-  final EdgeInsetsGeometry? margin;
 
   const BannerApp({
     super.key,
     required this.imagePath,
     this.height = 164,
-    this.margin,
   });
 
   @override
@@ -17,7 +15,6 @@ class BannerApp extends StatelessWidget {
     return Container(
       height: height,
       width: double.infinity,
-      margin: margin ?? const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         border: Border.all(
           color: Theme.of(context).colorScheme.surfaceContainerHighest,

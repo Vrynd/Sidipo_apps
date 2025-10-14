@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:posyandu_digital_app/firebase_options.dart';
+import 'package:posyandu_digital_app/provider/bottom_navbar_provider.dart';
 import 'package:posyandu_digital_app/provider/firebase_auth_provider.dart';
 import 'package:posyandu_digital_app/provider/shared_preference_provider.dart';
 import 'package:posyandu_digital_app/provider/show_password_provider.dart';
@@ -12,7 +13,7 @@ import 'package:posyandu_digital_app/themes/theme.apps.dart';
 import 'package:posyandu_digital_app/ui/screens/auth/forgot_password_screen.dart';
 import 'package:posyandu_digital_app/ui/screens/auth/login_screen.dart';
 import 'package:posyandu_digital_app/ui/screens/auth/register_screen.dart';
-import 'package:posyandu_digital_app/ui/screens/home/home_screen.dart';
+import 'package:posyandu_digital_app/ui/screens/navigation_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,7 +37,8 @@ void main() async {
           create: (context) =>
               SharedPreferenceProvider(context.read<SharedPreferenceService>()),
         ),
-        ChangeNotifierProvider(create: (context) => ShowPasswordProvider())
+        ChangeNotifierProvider(create: (context) => ShowPasswordProvider()),
+        ChangeNotifierProvider(create: (context) => BottomNavBarProvider()),
       ],
       child: MyApp(),
     ),
@@ -60,7 +62,7 @@ class MyApp extends StatelessWidget {
         RouteScreen.register.name: (context) => const RegisterScreen(),
         RouteScreen.forgotPassword.name: (context) =>
             const ForgotPasswordScreen(),
-        RouteScreen.home.name: (context) => const HomeScreen(),
+        RouteScreen.home.name: (context) => const NavigationScreen(),
       },
     );
   }

@@ -3,16 +3,14 @@ import 'package:flutter/material.dart';
 class ServiceItem {
   final IconData icon;
   final String title;
-  final String time;
-  final String location;
+  final String subtitle;
   final Color iconColor;
   final Color backgroundColor;
 
   ServiceItem({
     required this.icon,
     required this.title,
-    required this.time,
-    required this.location,
+    required this.subtitle,
     required this.iconColor,
     required this.backgroundColor,
   });
@@ -28,6 +26,7 @@ class HealthServiceApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(items.length * 2 - 1, (index) {
         if (index.isEven) {
           final item = items[index ~/ 2];
@@ -56,24 +55,12 @@ class HealthServiceApp extends StatelessWidget {
               item.title,
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            subtitle: Row(
-              children: [
-                Text(
-                  item.time,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.outline,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(width: 14),
-                Text(
-                  item.location,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.outline,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
+            subtitle: Text(
+              item.subtitle,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.outline,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           );
         } else {
