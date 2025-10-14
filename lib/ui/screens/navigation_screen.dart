@@ -1,8 +1,12 @@
+// Flutter & Dart
 import 'package:flutter/material.dart';
 import 'package:posyandu_digital_app/provider/bottom_navbar_provider.dart';
+// Custom widgets / UI
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
 import 'package:posyandu_digital_app/ui/screens/home/home_screen.dart';
+// Provider
 import 'package:provider/provider.dart';
+// Third-party
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class NavigationScreen extends StatefulWidget {
