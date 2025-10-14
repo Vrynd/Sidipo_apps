@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:posyandu_digital_app/provider/bottom_navbar_provider.dart';
 // Custom widgets / UI
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
-import 'package:posyandu_digital_app/ui/screens/home/home_screen.dart';
+import 'package:posyandu_digital_app/ui/screens/MAIN/home_screen.dart';
+
 // Provider
 import 'package:provider/provider.dart';
 // Third-party

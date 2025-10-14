@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class FontApps {
-  static final TextStyle _headingStyle = GoogleFonts.sora();
-  static final TextStyle _bodyStyle = GoogleFonts.cabin();
+  // Gunakan hanya satu font: Sora
+  static final TextStyle _baseStyle = GoogleFonts.sora();
 
   /// displayLarge
-  static TextStyle displayLarge = _headingStyle.copyWith(
+  static TextStyle displayLarge = _baseStyle.copyWith(
     fontSize: 57,
     fontWeight: FontWeight.w700,
     height: 1.11,
@@ -14,7 +14,7 @@ class FontApps {
   );
 
   /// displayMedium
-  static TextStyle displayMedium = _headingStyle.copyWith(
+  static TextStyle displayMedium = _baseStyle.copyWith(
     fontSize: 45,
     fontWeight: FontWeight.w600,
     height: 1.17,
@@ -22,7 +22,7 @@ class FontApps {
   );
 
   /// displaySmall
-  static TextStyle displaySmall = _headingStyle.copyWith(
+  static TextStyle displaySmall = _baseStyle.copyWith(
     fontSize: 36,
     fontWeight: FontWeight.w500,
     height: 1.25,
@@ -30,35 +30,35 @@ class FontApps {
   );
 
   /// headlineLarge
-  static TextStyle headlineLarge = _headingStyle.copyWith(
+  static TextStyle headlineLarge = _baseStyle.copyWith(
     fontSize: 32,
     fontWeight: FontWeight.w600,
     height: 1.3,
   );
 
   /// headlineMedium
-  static TextStyle headlineMedium = _headingStyle.copyWith(
+  static TextStyle headlineMedium = _baseStyle.copyWith(
     fontSize: 28,
     fontWeight: FontWeight.w500,
     height: 1.25,
   );
 
   /// headlineSmall
-  static TextStyle headlineSmall = _headingStyle.copyWith(
+  static TextStyle headlineSmall = _baseStyle.copyWith(
     fontSize: 24,
     fontWeight: FontWeight.w400,
     height: 1.2,
   );
 
   /// titleLarge
-  static TextStyle titleLarge = _headingStyle.copyWith(
+  static TextStyle titleLarge = _baseStyle.copyWith(
     fontSize: 22,
     fontWeight: FontWeight.w600,
     height: 1.25,
   );
 
   /// titleMedium
-  static TextStyle titleMedium = _headingStyle.copyWith(
+  static TextStyle titleMedium = _baseStyle.copyWith(
     fontSize: 18,
     fontWeight: FontWeight.w500,
     height: 1.3,
@@ -66,7 +66,7 @@ class FontApps {
   );
 
   /// titleSmall
-  static TextStyle titleSmall = _headingStyle.copyWith(
+  static TextStyle titleSmall = _baseStyle.copyWith(
     fontSize: 14,
     fontWeight: FontWeight.w500,
     height: 1.3,
@@ -74,7 +74,7 @@ class FontApps {
   );
 
   /// bodyLarge
-  static TextStyle bodyLarge = _bodyStyle.copyWith(
+  static TextStyle bodyLarge = _baseStyle.copyWith(
     fontSize: 16,
     fontWeight: FontWeight.w400,
     height: 1.5,
@@ -82,7 +82,7 @@ class FontApps {
   );
 
   /// bodyMedium
-  static TextStyle bodyMedium = _bodyStyle.copyWith(
+  static TextStyle bodyMedium = _baseStyle.copyWith(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     height: 1.5,
@@ -90,7 +90,7 @@ class FontApps {
   );
 
   /// bodySmall
-  static TextStyle bodySmall = _bodyStyle.copyWith(
+  static TextStyle bodySmall = _baseStyle.copyWith(
     fontSize: 12,
     fontWeight: FontWeight.w400,
     height: 1.4,
@@ -98,7 +98,7 @@ class FontApps {
   );
 
   /// labelLarge
-  static TextStyle labelLarge = _bodyStyle.copyWith(
+  static TextStyle labelLarge = _baseStyle.copyWith(
     fontSize: 14,
     fontWeight: FontWeight.w500,
     height: 1.4,
@@ -106,15 +106,14 @@ class FontApps {
   );
 
   /// labelMedium
-  static TextStyle labelMedium = _bodyStyle.copyWith(
+  static TextStyle labelMedium = _baseStyle.copyWith(
     fontSize: 12,
     fontWeight: FontWeight.w500,
     height: 1.3,
     letterSpacing: 1.25,
   );
 
-  /// labelSmall
-  static TextStyle labelSmall = _bodyStyle.copyWith(
+  static TextStyle labelSmall = _baseStyle.copyWith(
     fontSize: 11,
     fontWeight: FontWeight.w400,
     height: 1.2,
