@@ -1,6 +1,7 @@
 // Flutter & Dart
 import 'package:flutter/material.dart';
 import 'package:posyandu_digital_app/provider/firebase_auth_provider.dart';
+import 'package:posyandu_digital_app/routes/navigation.dart';
 // Custom widgets / UI
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
 import 'package:posyandu_digital_app/ui/widget/main/banner_app.dart';
@@ -149,6 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   subtitle: 'Pemeriksaan kehamilan & edukasi gizi',
                   iconColor: Colors.pink.shade700,
                   backgroundColor: Colors.pink.shade100,
+                  onTapService: () => _goToService('Ibu Hamil dan Nifas'),
                 ),
                 ServiceItem(
                   icon: Icons.child_care_outlined,
@@ -156,6 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   subtitle: 'Penimbangan & imunisasi',
                   iconColor: Colors.orange.shade700,
                   backgroundColor: Colors.yellow.shade100,
+                  onTapService: () => _goToService('Bayi atau Balita'),
                 ),
                 ServiceItem(
                   icon: Icons.school_outlined,
@@ -163,6 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   subtitle: 'Penyuluhan kesehatan reproduksi',
                   iconColor: Colors.blue.shade700,
                   backgroundColor: Colors.blue.shade100,
+                  onTapService: () => _goToService('Sekolah atau Remaja'),
                 ),
                 ServiceItem(
                   icon: Icons.work_outline,
@@ -170,6 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   subtitle: 'Cek tekanan & kolesterol',
                   iconColor: Colors.green.shade700,
                   backgroundColor: Colors.green.shade100,
+                  onTapService: () => _goToService('Usia Produktif'),
                 ),
                 ServiceItem(
                   icon: Icons.elderly,
@@ -177,12 +182,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   subtitle: 'Pemeriksaan rutin & senam',
                   iconColor: Colors.purple.shade700,
                   backgroundColor: Colors.purple.shade100,
+                  onTapService: () => _goToService('Dewasa atau Lansia'),
                 ),
               ],
             ),
           ],
         ),
       ),
+    );
+  }
+
+  void _goToService(String serviceName) {
+    Navigator.pushNamed(
+      context,
+      RouteScreen.service.name,
+      arguments: serviceName,
     );
   }
 

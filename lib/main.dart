@@ -19,6 +19,7 @@ import 'package:posyandu_digital_app/themes/theme.apps.dart';
 import 'package:posyandu_digital_app/ui/screens/auth/forgot_password_screen.dart';
 import 'package:posyandu_digital_app/ui/screens/auth/login_screen.dart';
 import 'package:posyandu_digital_app/ui/screens/auth/register_screen.dart';
+import 'package:posyandu_digital_app/ui/screens/main/service_screen.dart';
 import 'package:posyandu_digital_app/ui/screens/navigation_screen.dart';
 // Provider & Shared Preferences
 import 'package:provider/provider.dart';
@@ -70,6 +71,9 @@ class MyApp extends StatelessWidget {
         RouteScreen.forgotPassword.name: (context) =>
             const ForgotPasswordScreen(),
         RouteScreen.home.name: (context) => const NavigationScreen(),
+        RouteScreen.service.name: (context) => const ServiceScreen(
+          
+        ),
       },
     );
   }

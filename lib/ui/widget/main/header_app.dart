@@ -25,28 +25,28 @@ class HeaderApp extends StatelessWidget {
           children: [
             if (username != null) ...[
               Text(
+                username!,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 25,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
                 'Hi,',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
-              const SizedBox(height: 2),
-              Text(
-                username!,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 24,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-              ),
             ] else if (title != null) ...[
               Text(
                 title!,
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w700,
-                  // fontSize: 30,
-                  color: Theme.of(context).colorScheme.onSurface,
+                  fontSize:25,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               ),
             ],

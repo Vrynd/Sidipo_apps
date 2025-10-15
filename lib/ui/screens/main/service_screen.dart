@@ -28,6 +28,8 @@ class _ServiceScreenState extends State<ServiceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final serviceName = ModalRoute.of(context)!.settings.arguments as String;
+
     return ScaffoldCustom(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
@@ -40,11 +42,19 @@ class _ServiceScreenState extends State<ServiceScreen> {
           duration: const Duration(milliseconds: 300),
           opacity: _isScrolling ? 1.0 : 0.0,
           child: Text(
-            'Layanan Kesehatan',
+            serviceName,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w600,
               color: Theme.of(context).colorScheme.onSurface,
             ),
+          ),
+        ),
+        leading: InkWell(
+          onTap: () => Navigator.pop(context),
+          child: Icon(
+            size: 26,
+            Icons.arrow_back_outlined,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
         ),
       ),
@@ -62,8 +72,8 @@ class _ServiceScreenState extends State<ServiceScreen> {
             bottom: 30,
           ),
           children: [
-            const HeaderApp(title: 'Layanan Kesehatan', showAvatar: false),
-            const SizedBox(height: 14),
+            HeaderApp(title: serviceName, showAvatar: false),
+            SizedBox(height: 14),
 
             // 🔹 Konten dummy mulai dari sini
             ...List.generate(

@@ -6,6 +6,7 @@ class ServiceItem {
   final String subtitle;
   final Color iconColor;
   final Color backgroundColor;
+  final VoidCallback? onTapService; 
 
   ServiceItem({
     required this.icon,
@@ -13,6 +14,7 @@ class ServiceItem {
     required this.subtitle,
     required this.iconColor,
     required this.backgroundColor,
+    this.onTapService,
   });
 }
 
@@ -35,6 +37,7 @@ class HealthServiceApp extends StatelessWidget {
           if (index.isEven) {
             final item = items[index ~/ 2];
             return ListTile(
+              onTap: item.onTapService,
               dense: true,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),

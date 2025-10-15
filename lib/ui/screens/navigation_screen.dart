@@ -4,8 +4,6 @@ import 'package:posyandu_digital_app/provider/bottom_navbar_provider.dart';
 // Custom widgets / UI
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
 import 'package:posyandu_digital_app/ui/screens/main/home_screen.dart';
-import 'package:posyandu_digital_app/ui/screens/main/service_screen.dart';
-
 // Provider
 import 'package:provider/provider.dart';
 // Third-party
@@ -26,7 +24,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
         return ScaffoldCustom(
           body: switch (nav.selectedIndex) {
             0 => const HomeScreen(),
-            1 => const ServiceScreen(),
             _ => const HomeScreen(),
           },
           bottomNavigationBar: SalomonBottomBar(
@@ -41,17 +38,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 icon: Icon(Icons.explore_outlined, size: 28),
                 title: Text(
                   "Beranda",
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
-                ),
-                selectedColor: Theme.of(context).colorScheme.primary,
-                unselectedColor: Theme.of(context).colorScheme.secondary,
-              ),
-              SalomonBottomBarItem(
-                icon: Icon(Icons.health_and_safety_outlined, size: 28),
-                title: Text(
-                  "Layanan",
                   style: Theme.of(
                     context,
                   ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
