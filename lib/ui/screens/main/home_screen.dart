@@ -26,9 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     _scrollController.addListener(() {
-      if (_scrollController.offset > 0 && !_isScrolling) {
+      if (_scrollController.offset > 10 && !_isScrolling) {
         setState(() => _isScrolling = true);
-      } else if (_scrollController.offset <= 0 && _isScrolling) {
+      } else if (_scrollController.offset <= 10 && _isScrolling) {
         setState(() => _isScrolling = false);
       }
     });
@@ -63,7 +63,9 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         centerTitle: true,
         scrolledUnderElevation: 0,
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: _isScrolling
+            ? Theme.of(context).colorScheme.surfaceContainerLowest
+            : Theme.of(context).colorScheme.surface,
         title: AnimatedOpacity(
           duration: const Duration(milliseconds: 300),
           opacity: _isScrolling ? 1.0 : 0.0,

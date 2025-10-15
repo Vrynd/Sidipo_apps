@@ -56,15 +56,16 @@ class HealthServiceApp extends StatelessWidget {
               ),
               title: Text(
                 item.title,
-                style: Theme.of(
-                  context,
-                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w500),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w500,
+                ),
               ),
               subtitle: Text(
                 item.subtitle,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.outline,
                   fontWeight: FontWeight.w500,
+                  fontSize: 14,
                 ),
               ),
             );
