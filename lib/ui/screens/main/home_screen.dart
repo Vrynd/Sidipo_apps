@@ -92,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 30),
 
             Text(
-              'Informasi Pelayanan',
+              'Jadwal & Lokasi',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -131,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 30),
 
             Text(
-              'Sasaran Pelayanan',
+              'Layanan Kesehatan',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
@@ -158,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ServiceItem(
                   icon: Icons.school_outlined,
                   title: 'Sekolah atau Remaja',
-                  subtitle: 'Penyuluhan kesehatan reproduksi & pemeriksaan',
+                  subtitle: 'Penyuluhan kesehatan reproduksi',
                   iconColor: Colors.blue.shade700,
                   backgroundColor: Colors.blue.shade100,
                 ),
