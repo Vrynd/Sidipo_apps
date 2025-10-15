@@ -54,14 +54,16 @@ class InfoServiceApp extends StatelessWidget {
                   leading: Icon(item.icon, size: 24, color: item.iconColor),
                   title: Text(
                     item.title,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
+                      fontSize: 15,
                     ),
                   ),
                   trailing: Text(
                     item.value,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
+                      fontSize: 15,
                       color: Theme.of(context).colorScheme.outline,
                     ),
                   ),
@@ -93,7 +95,7 @@ class InfoServiceApp extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   padding: const EdgeInsets.symmetric(
-                    vertical: 6,
+                    vertical: 10,
                     horizontal: 16,
                   ),
                   child: Column(
@@ -101,8 +103,9 @@ class InfoServiceApp extends StatelessWidget {
                     children: [
                       Text(
                         summaryStats.title,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w500,
+                          fontSize: 15,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -115,9 +118,10 @@ class InfoServiceApp extends StatelessWidget {
                             ),
                             TextSpan(
                               text: ' ${summaryStats.unit}',
-                              style: Theme.of(context).textTheme.bodyLarge
+                              style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(
                                     fontWeight: FontWeight.w500,
+                                    fontSize: 15,
                                     color: Theme.of(
                                       context,
                                     ).colorScheme.outline,
