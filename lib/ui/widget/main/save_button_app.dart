@@ -33,7 +33,7 @@ class SaveButtonApp extends StatelessWidget {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 minimumSize: Size(double.infinity, height),
                 backgroundColor: Theme.of(context).colorScheme.primary,
@@ -57,7 +57,7 @@ class SaveButtonApp extends StatelessWidget {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   minimumSize: Size(double.infinity, height),
                   backgroundColor: Theme.of(

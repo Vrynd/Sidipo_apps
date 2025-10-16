@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:posyandu_digital_app/provider/village_identity_provider.dart';
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
-import 'package:posyandu_digital_app/ui/widget/main/alert_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/header_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/identity_form_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/progress_indicator_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/save_button_app.dart';
+import 'package:posyandu_digital_app/ui/widget/main/tab_bar_app.dart';
 import 'package:provider/provider.dart';
 
 class ServiceScreen extends StatefulWidget {
@@ -15,9 +15,52 @@ class ServiceScreen extends StatefulWidget {
   State<ServiceScreen> createState() => _ServiceScreenState();
 }
 
-class _ServiceScreenState extends State<ServiceScreen> {
+class _ServiceScreenState extends State<ServiceScreen>
+    with SingleTickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   bool _isScrolling = false;
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+
+    _scrollController.addListener(_onScroll);
+
+    _tabController.addListener(() {
+      setState(() {});
+      // setiap kali tab berubah, scroll ke atas
+      _scrollToTop();
+    });
+  }
+
+  void _scrollToTop() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    final offset = _scrollController.offset;
+    final scrolling = offset > 10;
+    if (scrolling != _isScrolling) {
+      setState(() => _isScrolling = scrolling);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,64 +113,77 @@ class _ServiceScreenState extends State<ServiceScreen> {
             Consumer<VillageIdentityProvider>(
               builder: (context, provider, child) {
                 return ProgressIndicatorApp(
-                  currentStep: 1,
+                  title: 'Progress',
+                  currentStep: _tabController.index + 1,
                   totalSteps: 2,
                   progress: provider.progress,
                 );
               },
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 16),
 
-            Text(
-              'Informasi Dasar',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+            // Tab Bar
+            ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              child: Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Theme.of(context).colorScheme.surfaceContainerLowest,
+                ),
+                child: TabBar(
+                  controller: _tabController,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  dividerColor: Colors.transparent,
+                  indicator: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                  ),
+                  labelColor: Theme.of(context).colorScheme.primary,
+                  unselectedLabelColor: Theme.of(
+                    context,
+                  ).colorScheme.onSurfaceVariant,
+                  tabs: const [
+                    TabBarApp(title: 'Pendaftaran', count: 12),
+                    TabBarApp(title: 'Pemeriksaan', count: 10),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 14),
-
-            AlertApp(
-              message:
-                  'Pastikan seluruh data diisi dengan benar sesuai KTP agar tidak terjadi kesalahan dalam pendataan.',
-              type: AlertType.info,
             ),
             const SizedBox(height: 20),
 
-            const IdentityFormApp(),
+            AnimatedBuilder(
+              animation: _tabController,
+              builder: (context, _) {
+                return IndexedStack(
+                  index: _tabController.index,
+                  children: const [
+                    IdentityFormApp(),
+                    Center(child: Text('Form Pemeriksaan')),
+                  ],
+                );
+              },
+            ),
           ],
         ),
       ),
       bottomNavigationBar: SaveButtonApp(
-        titleAction: 'Simpan Data',
-        onSave: () {},
+        titleAction: _tabController.index == 0 ? 'Berikutnya' : 'Simpan Data',
+        onSave: () {
+          if (_tabController.index == 0) {
+            _tabController.animateTo(1);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Data berhasil disimpan!')),
+            );
+          }
+        },
         onReset: () {
           context.read<VillageIdentityProvider>().clearForm();
+          _tabController.animateTo(0);
+          _scrollToTop();
         },
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    final offset = _scrollController.offset;
-    final scrolling = offset > 10;
-    if (scrolling != _isScrolling) {
-      setState(() => _isScrolling = scrolling);
-    }
-  }
-
-  @override
-  void dispose() {
-    _scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
-    super.dispose();
   }
 }
