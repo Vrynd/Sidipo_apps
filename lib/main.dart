@@ -71,9 +71,7 @@ class MyApp extends StatelessWidget {
         RouteScreen.forgotPassword.name: (context) =>
             const ForgotPasswordScreen(),
         RouteScreen.home.name: (context) => const NavigationScreen(),
-        RouteScreen.service.name: (context) => const ServiceScreen(
-          
-        ),
+        RouteScreen.service.name: (context) => const ServiceScreen(),
       },
     );
   }

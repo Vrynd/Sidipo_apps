@@ -86,10 +86,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: ListView(
           controller: _scrollController,
-          padding: EdgeInsets.only(top: 0, left: 22, right: 22, bottom: 30),
+          padding: EdgeInsets.only(top: 0, left: 22, right: 22, bottom: 22),
           children: [
             HeaderApp(username: _getUsername(), onAvatarTap: () {}),
-            const SizedBox(height: 14),
+            const SizedBox(height: 10),
 
             BannerApp(imagePath: 'assets/image/banner_posyandu.jpg'),
             const SizedBox(height: 30),

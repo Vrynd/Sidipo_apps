@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:posyandu_digital_app/models/village_identity.dart';
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
+import 'package:posyandu_digital_app/ui/widget/main/alert_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/header_app.dart';
+import 'package:posyandu_digital_app/ui/widget/main/identity_form_app.dart';
+import 'package:posyandu_digital_app/ui/widget/main/progress_indicator_app.dart';
+import 'package:posyandu_digital_app/ui/widget/main/save_button_app.dart';
 
 class ServiceScreen extends StatefulWidget {
   const ServiceScreen({super.key});
@@ -10,26 +15,13 @@ class ServiceScreen extends StatefulWidget {
 }
 
 class _ServiceScreenState extends State<ServiceScreen> {
+  late VillageIdentity identity;
   final ScrollController _scrollController = ScrollController();
   bool _isScrolling = false;
 
   @override
-  void initState() {
-    super.initState();
-
-    _scrollController.addListener(() {
-      if (_scrollController.offset > 10 && !_isScrolling) {
-        setState(() => _isScrolling = true);
-      } else if (_scrollController.offset <= 10 && _isScrolling) {
-        setState(() => _isScrolling = false);
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final serviceName = ModalRoute.of(context)!.settings.arguments as String;
-
     return ScaffoldCustom(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
@@ -69,68 +61,80 @@ class _ServiceScreenState extends State<ServiceScreen> {
             top: 0,
             left: 22,
             right: 22,
-            bottom: 30,
+            bottom: 22,
           ),
           children: [
             HeaderApp(title: serviceName, showAvatar: false),
-            SizedBox(height: 14),
+            const SizedBox(height: 10),
 
-            // 🔹 Konten dummy mulai dari sini
-            ...List.generate(
-              10,
-              (index) => Container(
-                margin: const EdgeInsets.only(bottom: 16),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceContainerLowest,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.outlineVariant,
-                  ),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.health_and_safety_outlined,
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 32,
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Layanan ${index + 1}',
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.w600),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Deskripsi singkat mengenai layanan ${index + 1}. '
-                            'Ini hanya contoh teks dummy agar halaman bisa discroll dan diuji tampilannya.',
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(
-                                  color: Theme.of(context).colorScheme.outline,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+            ProgressIndicatorApp(currentStep: 1, totalSteps: 2, progress: 0.0),
+            const SizedBox(height: 30),
+
+            Text(
+              'Informasi Dasar',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
+            SizedBox(height: 14),
+
+            AlertApp(
+              message:
+                  'Pastikan seluruh data diisi dengan benar sesuai KTP agar tidak terjadi kesalahan dalam pendataan.',
+              type: AlertType.info,
+            ),
+            const SizedBox(height: 20),
+
+            IdentityFormApp(identity: identity, setState: setState),
           ],
         ),
+      ),
+      bottomNavigationBar: SaveButtonApp(
+        titleAction: 'Simpan Data',
+        onSave: () {},
+        onReset: () {
+          setState(() {
+            identity.clear();
+          });
+        },
       ),
     );
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    identity = VillageIdentity(
+      nameController: TextEditingController(),
+      nikController: TextEditingController(),
+      nomorBpjsController: TextEditingController(),
+      birthDateController: TextEditingController(),
+      addressController: TextEditingController(),
+      rtController: TextEditingController(),
+      rwController: TextEditingController(),
+      noHpController: TextEditingController(),
+    );
+
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    final offset = _scrollController.offset;
+    final scrolling = offset > 10;
+    if (scrolling != _isScrolling) {
+      setState(() => _isScrolling = scrolling);
+    }
+  }
+
+  @override
   void dispose() {
-    _scrollController.dispose();
+    identity.clear();
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
     super.dispose();
   }
 }
