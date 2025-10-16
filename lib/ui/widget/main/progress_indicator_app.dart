@@ -47,7 +47,7 @@ class ProgressIndicatorApp extends StatelessWidget {
                   ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  '${(progress * 100).toStringAsFixed(0)} %',
+                  '${(progress * 100).toStringAsFixed(0)}%',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: Theme.of(context).colorScheme.primary,

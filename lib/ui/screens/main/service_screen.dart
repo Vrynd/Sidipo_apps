@@ -67,7 +67,15 @@ class _ServiceScreenState extends State<ServiceScreen> {
             HeaderApp(title: serviceName, showAvatar: false),
             const SizedBox(height: 10),
 
-            ProgressIndicatorApp(currentStep: 1, totalSteps: 2, progress: 0.0),
+            Consumer<VillageIdentityProvider>(
+              builder: (context, provider, child) {
+                return ProgressIndicatorApp(
+                  currentStep: 1,
+                  totalSteps: 2,
+                  progress: provider.progress,
+                );
+              },
+            ),
             const SizedBox(height: 30),
 
             Text(
@@ -87,7 +95,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
             ),
             const SizedBox(height: 20),
 
-            IdentityFormApp(),
+            const IdentityFormApp(),
           ],
         ),
       ),
@@ -104,7 +112,6 @@ class _ServiceScreenState extends State<ServiceScreen> {
   @override
   void initState() {
     super.initState();
-
     _scrollController.addListener(_onScroll);
   }
 
