@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:posyandu_digital_app/models/village_identity.dart';
+import 'package:posyandu_digital_app/provider/village_identity_provider.dart';
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
 import 'package:posyandu_digital_app/ui/widget/main/alert_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/header_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/identity_form_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/progress_indicator_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/save_button_app.dart';
+import 'package:provider/provider.dart';
 
 class ServiceScreen extends StatefulWidget {
   const ServiceScreen({super.key});
@@ -15,7 +16,6 @@ class ServiceScreen extends StatefulWidget {
 }
 
 class _ServiceScreenState extends State<ServiceScreen> {
-  late VillageIdentity identity;
   final ScrollController _scrollController = ScrollController();
   bool _isScrolling = false;
 
@@ -87,7 +87,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
             ),
             const SizedBox(height: 20),
 
-            IdentityFormApp(identity: identity, setState: setState),
+            IdentityFormApp(),
           ],
         ),
       ),
@@ -95,9 +95,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
         titleAction: 'Simpan Data',
         onSave: () {},
         onReset: () {
-          setState(() {
-            identity.clear();
-          });
+          context.read<VillageIdentityProvider>().clearForm();
         },
       ),
     );
@@ -106,17 +104,6 @@ class _ServiceScreenState extends State<ServiceScreen> {
   @override
   void initState() {
     super.initState();
-
-    identity = VillageIdentity(
-      nameController: TextEditingController(),
-      nikController: TextEditingController(),
-      nomorBpjsController: TextEditingController(),
-      birthDateController: TextEditingController(),
-      addressController: TextEditingController(),
-      rtController: TextEditingController(),
-      rwController: TextEditingController(),
-      noHpController: TextEditingController(),
-    );
 
     _scrollController.addListener(_onScroll);
   }
@@ -131,7 +118,6 @@ class _ServiceScreenState extends State<ServiceScreen> {
 
   @override
   void dispose() {
-    identity.clear();
     _scrollController
       ..removeListener(_onScroll)
       ..dispose();

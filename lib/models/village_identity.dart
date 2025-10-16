@@ -31,19 +31,40 @@ class VillageIdentity {
   });
 
   void clear() {
-    nameController.clear();
-    nikController.clear();
-    nomorBpjsController.clear();
-    birthDateController.clear();
-    addressController.clear();
-    rtController.clear();
-    rwController.clear();
-    noHpController.clear();
+    for (final controller in [
+      nameController,
+      nikController,
+      nomorBpjsController,
+      birthDateController,
+      addressController,
+      rtController,
+      rwController,
+      noHpController,
+    ]) {
+      controller.clear();
+    }
+
     selectedBpjs = null;
     selectedGender = null;
     selectedStatus = null;
     selectedWork = null;
   }
+
+  void dispose() {
+    for (final controller in [
+      nameController,
+      nikController,
+      nomorBpjsController,
+      birthDateController,
+      addressController,
+      rtController,
+      rwController,
+      noHpController,
+    ]) {
+      controller.dispose();
+    }
+  }
+
 
   Map<String, dynamic> toJson() {
     return {

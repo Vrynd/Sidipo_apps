@@ -9,6 +9,7 @@ import 'package:posyandu_digital_app/provider/bottom_navbar_provider.dart';
 import 'package:posyandu_digital_app/provider/firebase_auth_provider.dart';
 import 'package:posyandu_digital_app/provider/shared_preference_provider.dart';
 import 'package:posyandu_digital_app/provider/show_password_provider.dart';
+import 'package:posyandu_digital_app/provider/village_identity_provider.dart';
 // Routes
 import 'package:posyandu_digital_app/routes/navigation.dart';
 // Service
@@ -47,6 +48,7 @@ void main() async {
         ),
         ChangeNotifierProvider(create: (context) => ShowPasswordProvider()),
         ChangeNotifierProvider(create: (context) => BottomNavBarProvider()),
+        ChangeNotifierProvider(create: (_) => VillageIdentityProvider()),
       ],
       child: MyApp(),
     ),
