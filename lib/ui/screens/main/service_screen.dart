@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:posyandu_digital_app/provider/village_identity_provider.dart';
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
+import 'package:posyandu_digital_app/ui/widget/main/checkup_form_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/header_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/identity_form_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/progress_indicator_app.dart';
@@ -157,10 +158,7 @@ class _ServiceScreenState extends State<ServiceScreen>
               builder: (context, _) {
                 return IndexedStack(
                   index: _tabController.index,
-                  children: const [
-                    IdentityFormApp(),
-                    Center(child: Text('Form Pemeriksaan')),
-                  ],
+                  children: const [IdentityFormApp(), CheckupFormApp()],
                 );
               },
             ),

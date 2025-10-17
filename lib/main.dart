@@ -7,6 +7,7 @@ import 'package:posyandu_digital_app/firebase_options.dart';
 // Provider
 import 'package:posyandu_digital_app/provider/bottom_navbar_provider.dart';
 import 'package:posyandu_digital_app/provider/firebase_auth_provider.dart';
+import 'package:posyandu_digital_app/provider/pregnant_monther_provider.dart';
 import 'package:posyandu_digital_app/provider/shared_preference_provider.dart';
 import 'package:posyandu_digital_app/provider/show_password_provider.dart';
 import 'package:posyandu_digital_app/provider/village_identity_provider.dart';
@@ -49,6 +50,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => ShowPasswordProvider()),
         ChangeNotifierProvider(create: (context) => BottomNavBarProvider()),
         ChangeNotifierProvider(create: (_) => VillageIdentityProvider()),
+        ChangeNotifierProvider(create: (_) => PregnantMotherProvider()),
       ],
       child: MyApp(),
     ),
