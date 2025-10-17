@@ -17,7 +17,7 @@ class SaveButtonApp extends StatelessWidget {
     this.showResetButton = true,
     this.iconReset = Icons.restart_alt_rounded,
     this.height = 50,
-    this.padding = const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+    this.padding = const EdgeInsets.symmetric(horizontal: 22, vertical: 14), required bool isDisabled,
   });
 
   @override

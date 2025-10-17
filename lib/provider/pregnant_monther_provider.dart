@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:posyandu_digital_app/models/pregnant_mother.dart';
 
 class PregnantMotherProvider extends ChangeNotifier {
-  PregnantMother get mother => _mother;
-
-  final PregnantMother _mother = PregnantMother(
+  final PregnantMother mother = PregnantMother(
     husbandNameController: TextEditingController(),
     weightController: TextEditingController(),
     heightController: TextEditingController(),
@@ -15,96 +13,112 @@ class PregnantMotherProvider extends ChangeNotifier {
     bloodPresureController: TextEditingController(),
   );
 
-  double get progress {
-    final fields = [
-      _mother.husbandNameController.text,
-      _mother.weightController.text,
-      _mother.heightController.text,
-      _mother.visitTimeController.text,
-      _mother.pregnancyAgeController.text,
-      _mother.weightPrenancyController.text,
-      _mother.lilaController.text,
-      _mother.bloodPresureController.text,
-      _mother.addBlood,
-      _mother.breastMilk,
-      _mother.pregnantMonther,
-      _mother.pregnancyClass,
-      _mother.healthCentre,
-      _mother.screeningTbc.isNotEmpty ? 'filled' : '',
-      _mother.education.isNotEmpty ? 'filled' : '',
-    ];
+  double _progress = 0.0;
+  double get progress => _progress;
 
-    final filled = fields
-        .where((value) => value != null && value.toString().trim().isNotEmpty)
-        .length;
-
-    return filled / fields.length;
+  PregnantMotherProvider() {
+    // 🔄 Pantau semua perubahan teks
+    _listenToAllControllers();
   }
 
-  void setChildDistance(String? value) {
-    _mother.childDistance = value;
+  void _listenToAllControllers() {
+    mother.husbandNameController.addListener(onFieldChanged);
+    mother.weightController.addListener(onFieldChanged);
+    mother.heightController.addListener(onFieldChanged);
+    mother.visitTimeController.addListener(onFieldChanged);
+    mother.pregnancyAgeController.addListener(onFieldChanged);
+    mother.weightPrenancyController.addListener(onFieldChanged);
+    mother.lilaController.addListener(onFieldChanged);
+    mother.bloodPresureController.addListener(onFieldChanged);
+  }
+
+  void _updateProgress() {
+    int totalFields = 17;
+    int filledFields = 0;
+
+    if (mother.husbandNameController.text.isNotEmpty) filledFields++;
+    if (mother.weightController.text.isNotEmpty) filledFields++;
+    if (mother.heightController.text.isNotEmpty) filledFields++;
+    if (mother.visitTimeController.text.isNotEmpty) filledFields++;
+    if (mother.pregnancyAgeController.text.isNotEmpty) filledFields++;
+    if (mother.weightPrenancyController.text.isNotEmpty) filledFields++;
+    if (mother.lilaController.text.isNotEmpty) filledFields++;
+    if (mother.bloodPresureController.text.isNotEmpty) filledFields++;
+
+    if (mother.addBlood != null) filledFields++;
+    if (mother.breastMilk != null) filledFields++;
+    if (mother.pregnantMonther != null) filledFields++;
+    if (mother.pregnancyClass != null) filledFields++;
+    if (mother.healthCentre != null) filledFields++;
+    if (mother.childDistance != null) filledFields++;
+    if (mother.pregnantTo != null) filledFields++;
+
+    if (mother.screeningTbc.isNotEmpty) filledFields++;
+    if (mother.education.isNotEmpty) filledFields++;
+
+    _progress = (filledFields / totalFields).clamp(0.0, 1.0);
+  }
+
+  void onFieldChanged() {
+    _updateProgress();
     notifyListeners();
+  }
+
+  // Setter pilihan
+  void setChildDistance(String? value) {
+    mother.childDistance = value;
+    onFieldChanged();
   }
 
   void setPregnantTo(String? value) {
-    _mother.pregnantTo = value;
-    notifyListeners();
+    mother.pregnantTo = value;
+    onFieldChanged();
   }
 
   void setAddBlood(String? value) {
-    _mother.addBlood = value;
-    notifyListeners();
+    mother.addBlood = value;
+    onFieldChanged();
   }
 
   void setBreastMilk(String? value) {
-    _mother.breastMilk = value;
-    notifyListeners();
+    mother.breastMilk = value;
+    onFieldChanged();
   }
 
   void setPregnantMother(String? value) {
-    _mother.pregnantMonther = value;
-    notifyListeners();
+    mother.pregnantMonther = value;
+    onFieldChanged();
   }
 
   void setPregnancyClass(String? value) {
-    _mother.pregnancyClass = value;
-    notifyListeners();
+    mother.pregnancyClass = value;
+    onFieldChanged();
   }
 
   void setHealthCentre(String? value) {
-    _mother.healthCentre = value;
-    notifyListeners();
+    mother.healthCentre = value;
+    onFieldChanged();
   }
 
-  void toggleScreeningTbc(String value, bool selected) {
-    if (selected) {
-      _mother.screeningTbc.add(value);
-    } else {
-      _mother.screeningTbc.remove(value);
-    }
-    notifyListeners();
+  void setScreeningTbc(List<String> values) {
+    mother.screeningTbc = values;
+    onFieldChanged();
   }
 
-  void toggleEducation(String value, bool selected) {
-    if (selected) {
-      _mother.education.add(value);
-    } else {
-      _mother.education.remove(value);
-    }
-    notifyListeners();
+  void setEducation(List<String> values) {
+    mother.education = values;
+    onFieldChanged();
   }
 
-  void onFieldChanged() => notifyListeners();
-
-  // Reset semua data
-  void clearForm() {
-    _mother.clear();
+  void resetForm() {
+    mother.clear();
+    _updateProgress();
     notifyListeners();
   }
 
   @override
   void dispose() {
-    _mother.dispose();
+    mother.dispose();
     super.dispose();
   }
 }

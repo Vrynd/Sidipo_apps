@@ -22,8 +22,7 @@ class IdentityFormApp extends StatelessWidget {
               hintText: 'Masukkan nama lengkap sesuai KTP',
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.text,
-              onChanged: (_) =>
-                  context.read<VillageIdentityProvider>().onFieldChanged(),
+              onChanged: (_) => provider.onFieldChanged(),
             ),
             InputDataApp(
               isRequired: true,
@@ -32,15 +31,14 @@ class IdentityFormApp extends StatelessWidget {
               hintText: 'Masukkan 16 digit angka',
               textInputAction: TextInputAction.done,
               keyboardType: TextInputType.number,
-              onChanged: (_) =>
-                  context.read<VillageIdentityProvider>().onFieldChanged(),
+              onChanged:(_) => provider.onFieldChanged(),
             ),
             ChoiceDataApp(
               isRequired: true,
               title: 'Kepesertaan BPJS',
               options: ['Ya', 'Tidak'],
               selectedValue: identity.selectedBpjs,
-              onChanged: provider.setBpjs,
+              onChanged: (value) => provider.setBpjs(value!)
             ),
             InputDataApp(
               isRequired: true,
@@ -49,8 +47,7 @@ class IdentityFormApp extends StatelessWidget {
               hintText: 'Masukkan 13 digit angka',
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
-              onChanged: (_) =>
-                  context.read<VillageIdentityProvider>().onFieldChanged(),
+              onChanged:(_) => provider.onFieldChanged(),
             ),
             InputDataApp(
               isRequired: true,
@@ -59,15 +56,14 @@ class IdentityFormApp extends StatelessWidget {
               hintText: 'Masukkan tanggal lahir anda',
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.datetime,
-              onChanged: (_) =>
-                  context.read<VillageIdentityProvider>().onFieldChanged(),
+              onChanged: (_) => provider.onFieldChanged(),
             ),
             ChoiceDataApp(
               isRequired: true,
               title: 'Jenis Kelamin',
               options: ['Laki-laki', 'Perempuan'],
               selectedValue: identity.selectedGender,
-              onChanged:context.read<VillageIdentityProvider>().setGender,
+              onChanged:(value) => provider.setGender(value!)
             ),
             InputDataApp(
               isRequired: true,
@@ -78,8 +74,7 @@ class IdentityFormApp extends StatelessWidget {
               textInputAction: TextInputAction.next,
               minLines: 1,
               maxLines: 3,
-              onChanged: (_) =>
-                  context.read<VillageIdentityProvider>().onFieldChanged(),
+              onChanged:(_) => provider.onFieldChanged(),
             ),
             InputDataApp(
               isRequired: true,
@@ -88,8 +83,7 @@ class IdentityFormApp extends StatelessWidget {
               hintText: 'Masukkan sesuai rt masing masing',
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
-              onChanged: (_) =>
-                  context.read<VillageIdentityProvider>().onFieldChanged(),
+              onChanged: (_) => provider.onFieldChanged(),
             ),
             InputDataApp(
               isRequired: true,
@@ -98,8 +92,7 @@ class IdentityFormApp extends StatelessWidget {
               hintText: 'Masukkan sesuai rw masing masing',
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.done,
-              onChanged: (_) =>
-                  context.read<VillageIdentityProvider>().onFieldChanged(),
+              onChanged:(_) => provider.onFieldChanged(),
             ),
             ChoiceDataApp(
               isRequired: true,
@@ -112,7 +105,7 @@ class IdentityFormApp extends StatelessWidget {
                 'Belum Menikah',
               ],
               selectedValue: identity.selectedStatus,
-              onChanged: context.read<VillageIdentityProvider>().setStatus,
+              onChanged: (value) => provider.setStatus(value!)
             ),
             ChoiceDataApp(
               isRequired: true,
@@ -128,7 +121,7 @@ class IdentityFormApp extends StatelessWidget {
                 'Belum Bekerja',
               ],
               selectedValue: identity.selectedWork,
-              onChanged: context.read<VillageIdentityProvider>().setWork,
+              onChanged: (value) => provider.setWork(value!)
             ),
             InputDataApp(
               isRequired: true,
@@ -137,8 +130,7 @@ class IdentityFormApp extends StatelessWidget {
               hintText: 'Masukkan 12 digit angka',
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.done,
-              onChanged: (_) =>
-                  context.read<VillageIdentityProvider>().onFieldChanged(),
+              onChanged: (_) => provider.onFieldChanged(),
             ),
           ],
         );

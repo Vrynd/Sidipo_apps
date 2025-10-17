@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:posyandu_digital_app/provider/pregnant_monther_provider.dart';
 import 'package:posyandu_digital_app/provider/village_identity_provider.dart';
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
 import 'package:posyandu_digital_app/ui/widget/main/checkup_form_app.dart';
@@ -7,7 +9,6 @@ import 'package:posyandu_digital_app/ui/widget/main/identity_form_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/progress_indicator_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/save_button_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/tab_bar_app.dart';
-import 'package:provider/provider.dart';
 
 class ServiceScreen extends StatefulWidget {
   const ServiceScreen({super.key});
@@ -26,12 +27,10 @@ class _ServiceScreenState extends State<ServiceScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-
     _scrollController.addListener(_onScroll);
 
     _tabController.addListener(() {
       setState(() {});
-      // setiap kali tab berubah, scroll ke atas
       _scrollToTop();
     });
   }
@@ -46,15 +45,6 @@ class _ServiceScreenState extends State<ServiceScreen>
     }
   }
 
-  @override
-  void dispose() {
-    _scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
-    _tabController.dispose();
-    super.dispose();
-  }
-
   void _onScroll() {
     final offset = _scrollController.offset;
     final scrolling = offset > 10;
@@ -64,8 +54,27 @@ class _ServiceScreenState extends State<ServiceScreen>
   }
 
   @override
+  void dispose() {
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final serviceName = ModalRoute.of(context)!.settings.arguments as String;
+
+    final villageProvider = context.watch<VillageIdentityProvider>();
+    final pregnantProvider = context.watch<PregnantMotherProvider>();
+
+    final totalProgress =
+        ((villageProvider.progress + pregnantProvider.progress) / 2)
+            .clamp(0.0, 1.0);
+
+    final isComplete = totalProgress >= 1.0;
+
     return ScaffoldCustom(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
@@ -80,9 +89,9 @@ class _ServiceScreenState extends State<ServiceScreen>
           child: Text(
             serviceName,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
           ),
         ),
         leading: InkWell(
@@ -101,29 +110,20 @@ class _ServiceScreenState extends State<ServiceScreen>
         ),
         child: ListView(
           controller: _scrollController,
-          padding: const EdgeInsets.only(
-            top: 0,
-            left: 22,
-            right: 22,
-            bottom: 22,
-          ),
+          padding:
+              const EdgeInsets.only(top: 0, left: 22, right: 22, bottom: 22),
           children: [
             HeaderApp(title: serviceName, showAvatar: false),
             const SizedBox(height: 10),
 
-            Consumer<VillageIdentityProvider>(
-              builder: (context, provider, child) {
-                return ProgressIndicatorApp(
-                  title: 'Progress',
-                  currentStep: _tabController.index + 1,
-                  totalSteps: 2,
-                  progress: provider.progress,
-                );
-              },
+            ProgressIndicatorApp(
+              title: isComplete ? 'Selesai' : 'Progress',
+              currentStep: _tabController.index + 1,
+              totalSteps: 2,
+              progress: totalProgress,
             ),
             const SizedBox(height: 16),
 
-            // Tab Bar
             ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(10)),
               child: Container(
@@ -141,9 +141,8 @@ class _ServiceScreenState extends State<ServiceScreen>
                     color: Theme.of(context).colorScheme.primaryContainer,
                   ),
                   labelColor: Theme.of(context).colorScheme.primary,
-                  unselectedLabelColor: Theme.of(
-                    context,
-                  ).colorScheme.onSurfaceVariant,
+                  unselectedLabelColor:
+                      Theme.of(context).colorScheme.onSurfaceVariant,
                   tabs: const [
                     TabBarApp(title: 'Pendaftaran', count: 12),
                     TabBarApp(title: 'Pemeriksaan', count: 10),
@@ -158,26 +157,60 @@ class _ServiceScreenState extends State<ServiceScreen>
               builder: (context, _) {
                 return IndexedStack(
                   index: _tabController.index,
-                  children: const [IdentityFormApp(), CheckupFormApp()],
+                  children: const [
+                    IdentityFormApp(),
+                    CheckupFormApp(),
+                  ],
                 );
               },
             ),
           ],
         ),
       ),
+
       bottomNavigationBar: SaveButtonApp(
-        titleAction: _tabController.index == 0 ? 'Berikutnya' : 'Simpan Data',
+        titleAction: _tabController.index == 0
+            ? 'Berikutnya'
+            : (isComplete ? 'Kirim Data' : 'Simpan Data'),
+        isDisabled: _tabController.index == 1 && !isComplete,
         onSave: () {
           if (_tabController.index == 0) {
+            if (!villageProvider.identity.isComplete) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Lengkapi data pendaftaran terlebih dahulu.'),
+                ),
+              );
+              return;
+            }
             _tabController.animateTo(1);
           } else {
+            if (!isComplete) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content:
+                      Text('Lengkapi semua data hingga progress 100% terlebih dahulu.'),
+                ),
+              );
+              return;
+            }
+
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Data berhasil disimpan!')),
+              SnackBar(
+                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                content: Text(
+                  '🎉 Data berhasil dikirim!',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
+                ),
+              ),
             );
           }
         },
         onReset: () {
-          context.read<VillageIdentityProvider>().clearForm();
+          villageProvider.resetForm();
+          pregnantProvider.resetForm();
           _tabController.animateTo(0);
           _scrollToTop();
         },

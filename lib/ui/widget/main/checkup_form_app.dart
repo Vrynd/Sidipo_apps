@@ -21,10 +21,9 @@ class CheckupFormApp extends StatelessWidget {
               controller: identity.husbandNameController,
               title: 'Nama Pasangan',
               hintText: 'Masukkan nama pasangan',
-              textInputAction: TextInputAction.next,
+              textInputAction: TextInputAction.done,
               keyboardType: TextInputType.text,
-              onChanged: (_) =>
-                  context.read<PregnantMotherProvider>().onFieldChanged(),
+              onChanged: (_) => provider.onFieldChanged(),
             ),
             ChoiceDataApp(
               isRequired: true,
@@ -37,64 +36,59 @@ class CheckupFormApp extends StatelessWidget {
                 'Lebih 4 Tahun',
               ],
               selectedValue: identity.childDistance,
-              onChanged: provider.setChildDistance,
+              onChanged: (value) => provider.setChildDistance(value!),
             ),
             ChoiceDataApp(
               isRequired: true,
               title: 'Kehamilan Anak Keberapa',
               options: ['1', '2', '3', '4', 'Lebih Dari 4'],
               selectedValue: identity.pregnantTo,
-              onChanged: provider.setPregnantTo,
+              onChanged: (value) => provider.setPregnantTo(value!),
             ),
             InputDataApp(
               isRequired: true,
               controller: identity.weightController,
               title: 'Berat Badan Sebelum Hamil',
               hintText: 'Masukkan berat badan (kg)',
-              keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.next,
-              onChanged: (_) =>
-                  context.read<PregnantMotherProvider>().onFieldChanged(),
+              keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.done,
+              onChanged: (_) => provider.onFieldChanged(),
             ),
             InputDataApp(
               isRequired: true,
               controller: identity.heightController,
               title: 'Tinggi Badan',
               hintText: 'Masukkan tiinggi badan (cm)',
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.text,
-              onChanged: (_) =>
-                  context.read<PregnantMotherProvider>().onFieldChanged(),
+              textInputAction: TextInputAction.done,
+              keyboardType: TextInputType.number,
+              onChanged: (_) => provider.onFieldChanged(),
             ),
             InputDataApp(
               isRequired: true,
               controller: identity.visitTimeController,
               title: 'Waktu Kunjungan',
               hintText: 'Masukkan waktu kunjungan',
-              textInputAction: TextInputAction.next,
+              textInputAction: TextInputAction.done,
               keyboardType: TextInputType.datetime,
-              onChanged: (_) =>
-                  context.read<PregnantMotherProvider>().onFieldChanged(),
+              onChanged: (_) => provider.onFieldChanged(),
             ),
             InputDataApp(
               isRequired: true,
               controller: identity.pregnancyAgeController,
               title: 'Masukkan Usia Kehamilan',
               hintText: 'Masukkan usia kehamilan (minggu)',
-              keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.next,
-              onChanged: (_) =>
-                  context.read<PregnantMotherProvider>().onFieldChanged(),
+              keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.done,
+              onChanged: (_) => provider.onFieldChanged(),
             ),
             InputDataApp(
               isRequired: true,
               controller: identity.weightPrenancyController,
               title: 'Berat Badan',
               hintText: 'Masukkan berat badan (kg)',
-              keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.next,
-              onChanged: (_) =>
-                  context.read<PregnantMotherProvider>().onFieldChanged(),
+              keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.done,
+              onChanged: (_) => provider.onFieldChanged(),
             ),
             InputDataApp(
               isRequired: true,
@@ -102,9 +96,8 @@ class CheckupFormApp extends StatelessWidget {
               title: 'Lingkar Lengan Atas',
               hintText: 'Masukkan lingkar lengan atas (cm)',
               keyboardType: TextInputType.number,
-              textInputAction: TextInputAction.next,
-              onChanged: (_) =>
-                  context.read<PregnantMotherProvider>().onFieldChanged(),
+              textInputAction: TextInputAction.done,
+              onChanged: (_) => provider.onFieldChanged(),
             ),
             InputDataApp(
               isRequired: true,
@@ -113,8 +106,7 @@ class CheckupFormApp extends StatelessWidget {
               hintText: 'Masukkan tekanan darah (mmHg)',
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.done,
-              onChanged: (_) =>
-                  context.read<PregnantMotherProvider>().onFieldChanged(),
+              onChanged: (_) => provider.onFieldChanged(),
             ),
             SelectDataApp(
               isRequired: true,
@@ -122,8 +114,7 @@ class CheckupFormApp extends StatelessWidget {
               options: ['Batuk Lama', 'BB Turun', 'Berkeringat Malam', 'Demam'],
               selectedValues: identity.screeningTbc,
               onChanged: (List<String> selectedValues) {
-                provider.mother.screeningTbc = selectedValues;
-                provider.onFieldChanged();
+                provider.setScreeningTbc(selectedValues);
               },
             ),
             ChoiceDataApp(
@@ -131,37 +122,40 @@ class CheckupFormApp extends StatelessWidget {
               title: 'Pemberian Tablet Tambah Darah',
               options: ['Ya', 'Tidak'],
               selectedValue: identity.addBlood,
-              onChanged: context.read<PregnantMotherProvider>().setAddBlood,
+              onChanged: (value) => provider.setAddBlood(value!),
             ),
             ChoiceDataApp(
               isRequired: true,
               title: 'Ibu Memberikan Asi Eksklusif',
               options: ['Ya', 'Tidak'],
               selectedValue: identity.breastMilk,
-              onChanged: context.read<PregnantMotherProvider>().setBreastMilk,
+              onChanged: (value) => provider.setBreastMilk(value!),
             ),
             ChoiceDataApp(
               isRequired: true,
               title: 'Pemberian MT Ibu Hamil',
               options: ['Ya', 'Tidak'],
               selectedValue: identity.pregnantMonther,
-              onChanged: context.read<PregnantMotherProvider>().setPregnantMother,
+              onChanged: (value) => provider.setPregnantMother(value!),
             ),
             ChoiceDataApp(
               isRequired: true,
               title: 'Kelas Ibu Hamil',
               options: ['Ya', 'Tidak'],
               selectedValue: identity.pregnancyClass,
-              onChanged: context.read<PregnantMotherProvider>().setPregnancyClass,
+              onChanged: (value) => provider.setPregnancyClass(value!),
             ),
             SelectDataApp(
               isRequired: true,
               title: 'Penyuluhan',
-              options: ['Isi Piringku', 'Anjuran Minum TTD', 'Pemantauan Tanda Bahaya'],
+              options: [
+                'Isi Piringku',
+                'Anjuran Minum TTD',
+                'Pemantauan Tanda Bahaya',
+              ],
               selectedValues: identity.education,
               onChanged: (List<String> selectedValues) {
-                provider.mother.education = selectedValues;
-                provider.onFieldChanged();
+                provider.setEducation(selectedValues);
               },
             ),
             ChoiceDataApp(
@@ -169,7 +163,7 @@ class CheckupFormApp extends StatelessWidget {
               title: 'Rujuk Ke Puskemas atau Pustu',
               options: ['Ya', 'Tidak'],
               selectedValue: identity.healthCentre,
-              onChanged: context.read<PregnantMotherProvider>().setHealthCentre,
+              onChanged: (value) => provider.setHealthCentre(value!),
             ),
           ],
         );
