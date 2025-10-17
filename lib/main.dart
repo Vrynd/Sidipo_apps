@@ -7,10 +7,10 @@ import 'package:posyandu_digital_app/firebase_options.dart';
 // Provider
 import 'package:posyandu_digital_app/provider/bottom_navbar_provider.dart';
 import 'package:posyandu_digital_app/provider/firebase_auth_provider.dart';
-import 'package:posyandu_digital_app/provider/pregnant_monther_provider.dart';
+import 'package:posyandu_digital_app/provider/checkup/checkup_provider.dart';
 import 'package:posyandu_digital_app/provider/shared_preference_provider.dart';
 import 'package:posyandu_digital_app/provider/show_password_provider.dart';
-import 'package:posyandu_digital_app/provider/village_identity_provider.dart';
+import 'package:posyandu_digital_app/provider/checkup/resident_provider.dart';
 // Routes
 import 'package:posyandu_digital_app/routes/navigation.dart';
 // Service
@@ -49,8 +49,8 @@ void main() async {
         ),
         ChangeNotifierProvider(create: (context) => ShowPasswordProvider()),
         ChangeNotifierProvider(create: (context) => BottomNavBarProvider()),
-        ChangeNotifierProvider(create: (_) => VillageIdentityProvider()),
-        ChangeNotifierProvider(create: (_) => PregnantMotherProvider()),
+        ChangeNotifierProvider(create: (_) => ResidentProvider()),
+        ChangeNotifierProvider(create: (_) => CheckUpProvider()),
       ],
       child: MyApp(),
     ),

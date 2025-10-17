@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:posyandu_digital_app/provider/pregnant_monther_provider.dart';
+import 'package:posyandu_digital_app/provider/checkup/checkup_provider.dart';
 import 'package:posyandu_digital_app/ui/widget/main/choice_data_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/input_data_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/select_data_app.dart';
@@ -10,7 +10,7 @@ class CheckupFormApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<PregnantMotherProvider>(
+    return Consumer<CheckUpProvider>(
       builder: (context, provider, child) {
         final identity = provider.mother;
 

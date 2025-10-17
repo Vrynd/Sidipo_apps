@@ -1,23 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:posyandu_digital_app/models/pregnant_mother.dart';
+import 'package:posyandu_digital_app/models/data/pregnant_mother.dart';
 
-class PregnantMotherProvider extends ChangeNotifier {
-  final PregnantMother mother = PregnantMother(
-    husbandNameController: TextEditingController(),
-    weightController: TextEditingController(),
-    heightController: TextEditingController(),
-    visitTimeController: TextEditingController(),
-    pregnancyAgeController: TextEditingController(),
-    weightPrenancyController: TextEditingController(),
-    lilaController: TextEditingController(),
-    bloodPresureController: TextEditingController(),
-  );
+class CheckUpProvider extends ChangeNotifier {
+  final PregnantMother mother = PregnantMother();
 
   double _progress = 0.0;
   double get progress => _progress;
 
-  PregnantMotherProvider() {
-    // 🔄 Pantau semua perubahan teks
+  CheckUpProvider() {
     _listenToAllControllers();
   }
 
@@ -64,7 +54,6 @@ class PregnantMotherProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Setter pilihan
   void setChildDistance(String? value) {
     mother.childDistance = value;
     onFieldChanged();

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class PregnantMother {
-  final TextEditingController husbandNameController;
-  final TextEditingController weightController;
-  final TextEditingController heightController;
-  final TextEditingController visitTimeController;
-  final TextEditingController pregnancyAgeController;
-  final TextEditingController weightPrenancyController;
-  final TextEditingController lilaController;
-  final TextEditingController bloodPresureController;
+  final TextEditingController husbandNameController = TextEditingController();
+  final TextEditingController weightController = TextEditingController();
+  final TextEditingController heightController = TextEditingController();
+  final TextEditingController visitTimeController = TextEditingController();
+  final TextEditingController pregnancyAgeController = TextEditingController();
+  final TextEditingController weightPrenancyController = TextEditingController();
+  final TextEditingController lilaController = TextEditingController();
+  final TextEditingController bloodPresureController = TextEditingController();
 
   String? childDistance;
   String? pregnantTo;
@@ -21,25 +21,7 @@ class PregnantMother {
   List<String> screeningTbc = [];
   List<String> education = [];
 
-  PregnantMother({
-    required this.husbandNameController,
-    required this.weightController,
-    required this.heightController,
-    required this.visitTimeController,
-    required this.pregnancyAgeController,
-    required this.weightPrenancyController,
-    required this.lilaController,
-    required this.bloodPresureController,
-    this.childDistance,
-    this.pregnantTo,
-    this.addBlood,
-    this.breastMilk,
-    this.pregnantMonther,
-    this.pregnancyClass,
-    this.healthCentre,
-    this.screeningTbc = const [],
-    this.education = const [],
-  });
+  PregnantMother();
 
   void clear() {
     for (final controller in [

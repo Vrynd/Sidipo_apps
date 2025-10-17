@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:posyandu_digital_app/provider/pregnant_monther_provider.dart';
-import 'package:posyandu_digital_app/provider/village_identity_provider.dart';
+
+import 'package:posyandu_digital_app/provider/checkup/checkup_provider.dart';
+import 'package:posyandu_digital_app/provider/checkup/resident_provider.dart';
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
-import 'package:posyandu_digital_app/ui/widget/main/checkup_form_app.dart';
+import 'package:posyandu_digital_app/ui/widget/form/checkup_form_app.dart';
+import 'package:posyandu_digital_app/ui/widget/form/resident_form_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/header_app.dart';
-import 'package:posyandu_digital_app/ui/widget/main/identity_form_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/progress_indicator_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/save_button_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/tab_bar_app.dart';
@@ -46,8 +47,7 @@ class _ServiceScreenState extends State<ServiceScreen>
   }
 
   void _onScroll() {
-    final offset = _scrollController.offset;
-    final scrolling = offset > 10;
+    final scrolling = _scrollController.offset > 10;
     if (scrolling != _isScrolling) {
       setState(() => _isScrolling = scrolling);
     }
@@ -65,15 +65,8 @@ class _ServiceScreenState extends State<ServiceScreen>
   @override
   Widget build(BuildContext context) {
     final serviceName = ModalRoute.of(context)!.settings.arguments as String;
-
-    final villageProvider = context.watch<VillageIdentityProvider>();
-    final pregnantProvider = context.watch<PregnantMotherProvider>();
-
-    final totalProgress =
-        ((villageProvider.progress + pregnantProvider.progress) / 2)
-            .clamp(0.0, 1.0);
-
-    final isComplete = totalProgress >= 1.0;
+    final residentProvider = context.read<ResidentProvider>();
+    final checkupProvider = context.read<CheckUpProvider>();
 
     return ScaffoldCustom(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -104,40 +97,42 @@ class _ServiceScreenState extends State<ServiceScreen>
         ),
       ),
       body: ScrollConfiguration(
-        behavior: const ScrollBehavior().copyWith(
-          overscroll: false,
-          physics: const BouncingScrollPhysics(),
-        ),
+        behavior: const ScrollBehavior().copyWith(overscroll: false),
         child: ListView(
           controller: _scrollController,
-          padding:
-              const EdgeInsets.only(top: 0, left: 22, right: 22, bottom: 22),
+          padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
           children: [
             HeaderApp(title: serviceName, showAvatar: false),
             const SizedBox(height: 10),
 
-            ProgressIndicatorApp(
-              title: isComplete ? 'Selesai' : 'Progress',
-              currentStep: _tabController.index + 1,
-              totalSteps: 2,
-              progress: totalProgress,
+            /// ✅ Hanya bagian ini yang akan rebuild saat progress berubah
+            Selector2<ResidentProvider, CheckUpProvider, double>(
+              selector: (context, resident, checkup) =>
+                  ((resident.progress + checkup.progress) / 2).clamp(0.0, 1.0),
+              builder: (context, totalProgress, _) {
+                final isComplete = totalProgress >= 1.0;
+                return ProgressIndicatorApp(
+                  title: isComplete ? 'Selesai' : 'Progress',
+                  currentStep: _tabController.index + 1,
+                  totalSteps: 2,
+                  progress: totalProgress,
+                );
+              },
             ),
+
             const SizedBox(height: 16),
 
             ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              borderRadius: BorderRadius.circular(10),
               child: Container(
                 height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Theme.of(context).colorScheme.surfaceContainerLowest,
-                ),
+                color: Theme.of(context).colorScheme.surfaceContainerLowest,
                 child: TabBar(
                   controller: _tabController,
                   indicatorSize: TabBarIndicatorSize.tab,
                   dividerColor: Colors.transparent,
                   indicator: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    borderRadius: BorderRadius.circular(10),
                     color: Theme.of(context).colorScheme.primaryContainer,
                   ),
                   labelColor: Theme.of(context).colorScheme.primary,
@@ -150,6 +145,7 @@ class _ServiceScreenState extends State<ServiceScreen>
                 ),
               ),
             ),
+
             const SizedBox(height: 20),
 
             AnimatedBuilder(
@@ -158,7 +154,7 @@ class _ServiceScreenState extends State<ServiceScreen>
                 return IndexedStack(
                   index: _tabController.index,
                   children: const [
-                    IdentityFormApp(),
+                    ResidentFormApp(),
                     CheckupFormApp(),
                   ],
                 );
@@ -168,51 +164,60 @@ class _ServiceScreenState extends State<ServiceScreen>
         ),
       ),
 
-      bottomNavigationBar: SaveButtonApp(
-        titleAction: _tabController.index == 0
-            ? 'Berikutnya'
-            : (isComplete ? 'Kirim Data' : 'Simpan Data'),
-        isDisabled: _tabController.index == 1 && !isComplete,
-        onSave: () {
-          if (_tabController.index == 0) {
-            if (!villageProvider.identity.isComplete) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Lengkapi data pendaftaran terlebih dahulu.'),
-                ),
-              );
-              return;
-            }
-            _tabController.animateTo(1);
-          } else {
-            if (!isComplete) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content:
-                      Text('Lengkapi semua data hingga progress 100% terlebih dahulu.'),
-                ),
-              );
-              return;
-            }
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                content: Text(
-                  '🎉 Data berhasil dikirim!',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+      bottomNavigationBar: Selector2<ResidentProvider, CheckUpProvider, double>(
+        selector: (context, resident, checkup) =>
+            ((resident.progress + checkup.progress) / 2).clamp(0.0, 1.0),
+        builder: (context, totalProgress, _) {
+          final isComplete = totalProgress >= 1.0;
+          return SaveButtonApp(
+            titleAction: _tabController.index == 0
+                ? 'Berikutnya'
+                : (isComplete ? 'Kirim Data' : 'Simpan Data'),
+            isDisabled: _tabController.index == 1 && !isComplete,
+            onSave: () {
+              if (_tabController.index == 0) {
+                if (residentProvider.progress < 1.0) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content:
+                          Text('Lengkapi data pendaftaran terlebih dahulu.'),
+                    ),
+                  );
+                  return;
+                }
+                _tabController.animateTo(1);
+              } else {
+                if (!isComplete) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                          'Lengkapi semua data hingga progress 100% terlebih dahulu.'),
+                    ),
+                  );
+                  return;
+                }
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor:
+                        Theme.of(context).colorScheme.primaryContainer,
+                    content: Text(
+                      '🎉 Data berhasil dikirim!',
+                      style: TextStyle(
+                        color:
+                            Theme.of(context).colorScheme.onPrimaryContainer,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            );
-          }
-        },
-        onReset: () {
-          villageProvider.resetForm();
-          pregnantProvider.resetForm();
-          _tabController.animateTo(0);
-          _scrollToTop();
+                );
+              }
+            },
+            onReset: () {
+              residentProvider.resetForm();
+              checkupProvider.resetForm();
+              _tabController.animateTo(0);
+              _scrollToTop();
+            },
+          );
         },
       ),
     );

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:posyandu_digital_app/provider/village_identity_provider.dart';
+import 'package:posyandu_digital_app/provider/checkup/resident_provider.dart';
 import 'package:posyandu_digital_app/ui/widget/main/choice_data_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/input_data_app.dart';
 import 'package:provider/provider.dart';
 
-class IdentityFormApp extends StatelessWidget {
-  const IdentityFormApp({super.key});
+class ResidentFormApp extends StatelessWidget {
+  const ResidentFormApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<VillageIdentityProvider>(
+    return Consumer<ResidentProvider>(
       builder: (context, provider, child) {
-        final identity = provider.identity;
+        final identity = provider.resident;
 
         return Column(
           children: [
