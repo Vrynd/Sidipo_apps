@@ -10,6 +10,7 @@ class InputDataApp extends StatelessWidget {
   final TextEditingController? controller;
   final int minLines;
   final int maxLines;
+  final VoidCallback? onTap;
   final EdgeInsetsGeometry margin;
 
   const InputDataApp({
@@ -23,6 +24,7 @@ class InputDataApp extends StatelessWidget {
     this.controller,
     this.minLines = 1,
     this.maxLines = 1,
+    this.onTap,
     this.margin = const EdgeInsets.only(bottom: 16),
   });
 
@@ -65,6 +67,8 @@ class InputDataApp extends StatelessWidget {
               textInputAction: textInputAction,
               minLines: minLines,
               maxLines: maxLines,
+              readOnly: onTap != null,
+              onTap: onTap,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),

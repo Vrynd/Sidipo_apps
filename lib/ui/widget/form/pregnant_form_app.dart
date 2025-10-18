@@ -5,8 +5,8 @@ import 'package:posyandu_digital_app/ui/widget/main/input_data_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/select_data_app.dart';
 import 'package:provider/provider.dart';
 
-class CheckupFormApp extends StatelessWidget {
-  const CheckupFormApp({super.key});
+class PregnantFormApp extends StatelessWidget {
+  const PregnantFormApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +71,19 @@ class CheckupFormApp extends StatelessWidget {
               textInputAction: TextInputAction.done,
               keyboardType: TextInputType.datetime,
               onChanged: (_) => provider.onFieldChanged(),
+              onTap: () async {
+                final pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2100),
+                );
+
+                if (pickedDate != null) {
+                  identity.visitTimeController.text =
+                      "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}";
+                }
+              },
             ),
             InputDataApp(
               isRequired: true,

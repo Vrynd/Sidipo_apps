@@ -21,6 +21,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _isScrolling = false;
+  String? _cachedUsername;
 
   @override
   void initState() {
@@ -34,8 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
   }
-
-  String? _cachedUsername;
 
   @override
   void didChangeDependencies() {
@@ -55,6 +54,34 @@ class _HomeScreenState extends State<HomeScreen> {
       return "${parts[0]} ${parts[1]}";
     }
     return "User";
+  }
+
+  Future<void> _goToService(String serviceName) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return const Center(
+          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 3),
+        );
+      },
+    );
+
+    await Future.delayed(const Duration(seconds: 1));
+    if (context.mounted) Navigator.pop(context);
+    if (context.mounted) {
+      Navigator.pushNamed(
+        context,
+        RouteScreen.service.name,
+        arguments: serviceName,
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -170,19 +197,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 ServiceItem(
                   icon: Icons.work_outline,
-                  title: 'Usia Produktif',
+                  title: 'Dewasa',
                   subtitle: 'Cek tekanan & kolesterol',
                   iconColor: Colors.green.shade700,
                   backgroundColor: Colors.green.shade100,
-                  onTapService: () => _goToService('Usia Produktif'),
+                  onTapService: () => _goToService('Dewasa'),
                 ),
                 ServiceItem(
                   icon: Icons.elderly,
-                  title: 'Dewasa atau Lansia',
+                  title: 'Lansia',
                   subtitle: 'Pemeriksaan rutin & senam',
                   iconColor: Colors.purple.shade700,
                   backgroundColor: Colors.purple.shade100,
-                  onTapService: () => _goToService('Dewasa atau Lansia'),
+                  onTapService: () => _goToService('Lansia'),
                 ),
               ],
             ),
@@ -190,19 +217,5 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-  }
-
-  void _goToService(String serviceName) {
-    Navigator.pushNamed(
-      context,
-      RouteScreen.service.name,
-      arguments: serviceName,
-    );
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
   }
 }

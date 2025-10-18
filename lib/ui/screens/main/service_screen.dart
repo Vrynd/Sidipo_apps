@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:posyandu_digital_app/ui/widget/form/adult_form_app.dart';
+import 'package:posyandu_digital_app/ui/widget/form/eldery_form_app.dart';
+import 'package:posyandu_digital_app/ui/widget/form/school_teenager_form_app.dart';
 import 'package:provider/provider.dart';
-
 import 'package:posyandu_digital_app/provider/checkup/checkup_provider.dart';
 import 'package:posyandu_digital_app/provider/checkup/resident_provider.dart';
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
-import 'package:posyandu_digital_app/ui/widget/form/checkup_form_app.dart';
+import 'package:posyandu_digital_app/ui/widget/form/pregnant_form_app.dart';
 import 'package:posyandu_digital_app/ui/widget/form/resident_form_app.dart';
+import 'package:posyandu_digital_app/ui/widget/form/toddler_form_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/header_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/progress_indicator_app.dart';
 import 'package:posyandu_digital_app/ui/widget/main/save_button_app.dart';
@@ -21,78 +24,92 @@ class ServiceScreen extends StatefulWidget {
 class _ServiceScreenState extends State<ServiceScreen>
     with SingleTickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
-  bool _isScrolling = false;
-  late TabController _tabController;
+  late final TabController _tabController;
+  final ValueNotifier<bool> _isScrolling = ValueNotifier(false);
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    _scrollController.addListener(_onScroll);
-
-    _tabController.addListener(() {
-      setState(() {});
-      _scrollToTop();
+    _scrollController.addListener(() {
+      _isScrolling.value = _scrollController.offset > 10;
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _tabController.dispose();
+    _isScrolling.dispose();
+    super.dispose();
   }
 
   void _scrollToTop() {
     if (_scrollController.hasClients) {
       _scrollController.animateTo(
         0,
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 250),
         curve: Curves.easeOut,
       );
     }
   }
 
-  void _onScroll() {
-    final scrolling = _scrollController.offset > 10;
-    if (scrolling != _isScrolling) {
-      setState(() => _isScrolling = scrolling);
+  Widget _buildForm(String serviceName) {
+    switch (serviceName) {
+      case 'Ibu Hamil dan Nifas':
+        return const PregnantFormApp();
+      case 'Bayi atau Balita':
+        return const ToddlerFormApp();
+      case 'Sekolah atau Remaja':
+        return const SchoolTeenagerFormApp();
+      case 'Dewasa':
+        return const AdultFormApp();
+      case 'Lansia':
+        return const ElederyFormApp();
+      default:
+        return const Center(
+          child: Text('Formulir belum tersedia untuk layanan ini'),
+        );
     }
   }
 
   @override
-  void dispose() {
-    _scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final serviceName = ModalRoute.of(context)!.settings.arguments as String;
+    final serviceName =
+        ModalRoute.of(context)?.settings.arguments as String? ?? 'Layanan';
     final residentProvider = context.read<ResidentProvider>();
     final checkupProvider = context.read<CheckUpProvider>();
 
     return ScaffoldCustom(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
-        centerTitle: true,
-        scrolledUnderElevation: 0,
-        backgroundColor: _isScrolling
-            ? Theme.of(context).colorScheme.surfaceContainerLowest
-            : Theme.of(context).colorScheme.surface,
-        title: AnimatedOpacity(
-          duration: const Duration(milliseconds: 300),
-          opacity: _isScrolling ? 1.0 : 0.0,
-          child: Text(
-            serviceName,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: ValueListenableBuilder<bool>(
+          valueListenable: _isScrolling,
+          builder: (context, isScrolling, _) => AppBar(
+            centerTitle: true,
+            scrolledUnderElevation: 0,
+            backgroundColor: isScrolling
+                ? Theme.of(context).colorScheme.surfaceContainerLowest
+                : Theme.of(context).colorScheme.surface,
+            title: AnimatedOpacity(
+              duration: const Duration(milliseconds: 250),
+              opacity: isScrolling ? 1.0 : 0.0,
+              child: Text(
+                serviceName,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
-          ),
-        ),
-        leading: InkWell(
-          onTap: () => Navigator.pop(context),
-          child: Icon(
-            size: 26,
-            Icons.arrow_back_outlined,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back_outlined,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+              onPressed: () => Navigator.pop(context),
+            ),
           ),
         ),
       ),
@@ -105,70 +122,73 @@ class _ServiceScreenState extends State<ServiceScreen>
             HeaderApp(title: serviceName, showAvatar: false),
             const SizedBox(height: 10),
 
-            /// ✅ Hanya bagian ini yang akan rebuild saat progress berubah
             Selector2<ResidentProvider, CheckUpProvider, double>(
-              selector: (context, resident, checkup) =>
-                  ((resident.progress + checkup.progress) / 2).clamp(0.0, 1.0),
-              builder: (context, totalProgress, _) {
-                final isComplete = totalProgress >= 1.0;
-                return ProgressIndicatorApp(
-                  title: isComplete ? 'Selesai' : 'Progress',
-                  currentStep: _tabController.index + 1,
-                  totalSteps: 2,
-                  progress: totalProgress,
-                );
-              },
+              selector: (context, r, c) =>
+                  ((r.progress + c.progress) / 2).clamp(0.0, 1.0),
+              builder: (context, progress, _) => ProgressIndicatorApp(
+                title: progress >= 1.0 ? 'Selesai' : 'Progress',
+                currentStep: _tabController.index + 1,
+                totalSteps: 2,
+                progress: progress,
+              ),
             ),
-
             const SizedBox(height: 16),
 
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
-                height: 50,
-                color: Theme.of(context).colorScheme.surfaceContainerLowest,
-                child: TabBar(
-                  controller: _tabController,
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  dividerColor: Colors.transparent,
-                  indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Theme.of(context).colorScheme.primaryContainer,
+            Selector<ResidentProvider, bool>(
+              selector: (_, res) => res.progress >= 1.0,
+              builder: (context, canAccessCheckup, _) => ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: IgnorePointer(
+                  ignoring: !canAccessCheckup,
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerLowest,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: TabBar(
+                      controller: _tabController,
+                      dividerColor: Colors.transparent,
+                      indicator: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Theme.of(context).colorScheme.primaryContainer,
+                      ),
+                      labelColor: Theme.of(context).colorScheme.primary,
+                      unselectedLabelColor: Theme.of(
+                        context,
+                      ).colorScheme.onSurfaceVariant,
+                      tabs: const [
+                        TabBarApp(title: 'Pendaftaran', count: 12),
+                        TabBarApp(title: 'Pemeriksaan', count: 10),
+                      ],
+                      onTap: (_) => _scrollToTop(),
+                    ),
                   ),
-                  labelColor: Theme.of(context).colorScheme.primary,
-                  unselectedLabelColor:
-                      Theme.of(context).colorScheme.onSurfaceVariant,
-                  tabs: const [
-                    TabBarApp(title: 'Pendaftaran', count: 12),
-                    TabBarApp(title: 'Pemeriksaan', count: 10),
-                  ],
                 ),
               ),
             ),
-
             const SizedBox(height: 20),
 
             AnimatedBuilder(
               animation: _tabController,
-              builder: (context, _) {
-                return IndexedStack(
-                  index: _tabController.index,
-                  children: const [
-                    ResidentFormApp(),
-                    CheckupFormApp(),
-                  ],
-                );
-              },
+              builder: (context, _) => IndexedStack(
+                index: _tabController.index,
+                children: [const ResidentFormApp(), _buildForm(serviceName)],
+              ),
             ),
           ],
         ),
       ),
 
       bottomNavigationBar: Selector2<ResidentProvider, CheckUpProvider, double>(
-        selector: (context, resident, checkup) =>
-            ((resident.progress + checkup.progress) / 2).clamp(0.0, 1.0),
+        selector: (context, r, c) =>
+            ((r.progress + c.progress) / 2).clamp(0.0, 1.0),
         builder: (context, totalProgress, _) {
           final isComplete = totalProgress >= 1.0;
+          final onSurface = Theme.of(context).colorScheme.onSurface;
+
           return SaveButtonApp(
             titleAction: _tabController.index == 0
                 ? 'Berikutnya'
@@ -179,33 +199,30 @@ class _ServiceScreenState extends State<ServiceScreen>
                 if (residentProvider.progress < 1.0) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content:
-                          Text('Lengkapi data pendaftaran terlebih dahulu.'),
+                      content: Text('Lengkapi data pendaftaran dahulu.'),
                     ),
                   );
                   return;
                 }
                 _tabController.animateTo(1);
+                _scrollToTop();
               } else {
                 if (!isComplete) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text(
-                          'Lengkapi semua data hingga progress 100% terlebih dahulu.'),
+                      content: Text('Lengkapi semua data terlebih dahulu.'),
                     ),
                   );
                   return;
                 }
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    backgroundColor:
-                        Theme.of(context).colorScheme.primaryContainer,
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.primaryContainer,
                     content: Text(
-                      '🎉 Data berhasil dikirim!',
-                      style: TextStyle(
-                        color:
-                            Theme.of(context).colorScheme.onPrimaryContainer,
-                      ),
+                      'Data berhasil dikirim!',
+                      style: TextStyle(color: onSurface),
                     ),
                   ),
                 );
