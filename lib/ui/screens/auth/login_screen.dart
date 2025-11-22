@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:posyandu_digital_app/firebase_auth_status.dart';
 import 'package:posyandu_digital_app/provider/firebase_auth_provider.dart';
 import 'package:posyandu_digital_app/provider/shared_preference_provider.dart';
-import 'package:posyandu_digital_app/routes/navigation.dart';
+import 'package:posyandu_digital_app/utils/routes/navigation.dart';
 import 'package:posyandu_digital_app/ui/custom/app_bar_custom.dart';
 import 'package:posyandu_digital_app/ui/custom/bottom_bar_custom.dart';
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';

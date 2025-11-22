@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:posyandu_digital_app/themes/font_apps.dart';
+import 'package:posyandu_digital_app/utils/themes/font_apps.dart';
 
 
 class ThemeApps {
