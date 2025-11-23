@@ -1,13 +1,15 @@
-// Flutter & Dart
 import 'package:flutter/material.dart';
 import 'package:posyandu_digital_app/provider/firebase_auth_provider.dart';
-// Custom widgets / UI
+import 'package:posyandu_digital_app/provider/shared_preference_provider.dart';
+import 'package:posyandu_digital_app/ui/widget/main/bottom_sheet.dart';
+import 'package:posyandu_digital_app/ui/widget/main/empty_state.dart';
+import 'package:posyandu_digital_app/ui/widget/main/health_service_grid.dart';
+import 'package:posyandu_digital_app/ui/widget/main/health_stat_card.dart';
+import 'package:posyandu_digital_app/ui/widget/main/service_item.dart';
+import 'package:posyandu_digital_app/ui/widget/main/title_action.dart';
+import 'package:posyandu_digital_app/ui/widget/main/user_greeting.dart';
+import 'package:posyandu_digital_app/utils/routes/navigation.dart';
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
-import 'package:posyandu_digital_app/ui/widget/main/banner_app.dart';
-import 'package:posyandu_digital_app/ui/widget/main/header_app.dart';
-import 'package:posyandu_digital_app/ui/widget/main/health_service_app.dart';
-import 'package:posyandu_digital_app/ui/widget/main/info_service_app.dart';
-// Provider
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,23 +20,36 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // State
   final ScrollController _scrollController = ScrollController();
-  bool _isScrolling = false;
+  final ValueNotifier<bool> isScrollingNotifier = ValueNotifier(false);
+  String? _cachedUsername;
 
+  // Get Theme
+  ColorScheme get color => Theme.of(context).colorScheme;
+  TextTheme get textStyle => Theme.of(context).textTheme;
+
+  // Format Username
+  String _getUsername() {
+    final fullname = _cachedUsername ?? "User";
+    final parts = fullname.split(" ");
+    if (parts.length == 1) return parts.first;
+    if (parts.length > 1) return "${parts[0]} ${parts[1]}";
+    return "User";
+  }
+
+  // Lifecycle
   @override
   void initState() {
     super.initState();
-
     _scrollController.addListener(() {
-      if (_scrollController.offset > 0 && !_isScrolling) {
-        setState(() => _isScrolling = true);
-      } else if (_scrollController.offset <= 0 && _isScrolling) {
-        setState(() => _isScrolling = false);
+      if (_scrollController.offset > 10) {
+        isScrollingNotifier.value = true;
+      } else {
+        isScrollingNotifier.value = false;
       }
     });
   }
-
-  String? _cachedUsername;
 
   @override
   void didChangeDependencies() {
@@ -45,148 +60,220 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  String _getUsername() {
-    final fullname = _cachedUsername ?? "User";
-    final parts = fullname.split(" ");
-    if (parts.length == 1) {
-      return parts.first;
-    } else if (parts.length > 1) {
-      return "${parts[0]} ${parts[1]}";
-    }
-    return "User";
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ScaffoldCustom(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
-        centerTitle: true,
-        scrolledUnderElevation: 0,
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        title: AnimatedOpacity(
-          duration: const Duration(milliseconds: 300),
-          opacity: _isScrolling ? 1.0 : 0.0,
-          child: Text(
-            'Sidipo Apps'.toUpperCase(),
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-        ),
-      ),
-      body: ScrollConfiguration(
-        behavior: const ScrollBehavior().copyWith(
-          overscroll: false,
-          physics: BouncingScrollPhysics(),
-        ),
-        child: ListView(
-          controller: _scrollController,
-          padding: EdgeInsets.only(top: 0, left: 22, right: 22, bottom: 30),
-          children: [
-            HeaderApp(username: _getUsername(), onAvatarTap: () {}),
-            const SizedBox(height: 14),
-
-            BannerApp(imagePath: 'assets/image/banner_posyandu.jpg'),
-            const SizedBox(height: 30),
-
-            Text(
-              'Jadwal & Lokasi',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: 14),
-            InfoServiceApp(
-              info: [
-                InfoItem(
-                  icon: Icons.place_outlined,
-                  iconColor: Colors.redAccent,
-                  title: 'Lokasi',
-                  value: 'Balai Desa / Pustu',
-                ),
-                InfoItem(
-                  icon: Icons.access_time_outlined,
-                  iconColor: Colors.blueAccent,
-                  title: 'Waktu Pelayanan',
-                  value: '08.00 - 16.00 WIB',
-                ),
-              ],
-              summary: [
-                SummaryItem(
-                  title: 'Durasi Pelayanan',
-                  number: '2',
-                  unit: 'hari',
-                ),
-                SummaryItem(
-                  title: 'Kader yang Bertugas',
-                  number: '10',
-                  unit: 'kader',
-                ),
-              ],
-            ),
-            const SizedBox(height: 30),
-
-            Text(
-              'Layanan Kesehatan',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: 14),
-            HealthServiceApp(
-              items: [
-                ServiceItem(
-                  icon: Icons.pregnant_woman_outlined,
-                  title: 'Ibu Hamil dan Nifas',
-                  subtitle: 'Pemeriksaan kehamilan & edukasi gizi',
-                  iconColor: Colors.pink.shade700,
-                  backgroundColor: Colors.pink.shade100,
-                ),
-                ServiceItem(
-                  icon: Icons.child_care_outlined,
-                  title: 'Bayi atau Balita',
-                  subtitle: 'Penimbangan & imunisasi',
-                  iconColor: Colors.orange.shade700,
-                  backgroundColor: Colors.yellow.shade100,
-                ),
-                ServiceItem(
-                  icon: Icons.school_outlined,
-                  title: 'Sekolah atau Remaja',
-                  subtitle: 'Penyuluhan kesehatan reproduksi',
-                  iconColor: Colors.blue.shade700,
-                  backgroundColor: Colors.blue.shade100,
-                ),
-                ServiceItem(
-                  icon: Icons.work_outline,
-                  title: 'Usia Produktif',
-                  subtitle: 'Cek tekanan & kolesterol',
-                  iconColor: Colors.green.shade700,
-                  backgroundColor: Colors.green.shade100,
-                ),
-                ServiceItem(
-                  icon: Icons.elderly,
-                  title: 'Dewasa atau Lansia',
-                  subtitle: 'Pemeriksaan rutin & senam',
-                  iconColor: Colors.purple.shade700,
-                  backgroundColor: Colors.purple.shade100,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   void dispose() {
     _scrollController.dispose();
+    isScrollingNotifier.dispose();
     super.dispose();
+  }
+
+  // Function
+  Future<void> _tapToSignOut(BuildContext context) async {
+    final sharedPreferenceProvider = context.read<SharedPreferenceProvider>();
+    final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
+    final navigator = Navigator.of(context);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+    await firebaseAuthProvider
+        .signOutUser()
+        .then((value) async {
+          await sharedPreferenceProvider.logout();
+          navigator.pushReplacementNamed(RouteScreen.login.name);
+        })
+        .whenComplete(() {
+          scaffoldMessenger.showSnackBar(
+            SnackBar(
+              content: Text(firebaseAuthProvider.message ?? ""),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        });
+  }
+
+  Future<void> _showLogoutConfirmation() async {
+    final result = await showConfirmationSheet(
+      context: context,
+      color: color,
+      textStyle: textStyle,
+      title: "Konfirmasi Logout",
+      description: "Apakah Anda yakin ingin keluar dari aplikasi?",
+      confirmTitle: "Logout",
+      cancelTitle: "Batal",
+      icon: Icons.power_settings_new_rounded,
+      iconColor: color.error,
+      iconBackground: color.errorContainer,
+    );
+
+    if (result == true && mounted) {
+      _tapToSignOut(context);
+    }
+  }
+
+  // Build UI
+  @override
+  Widget build(BuildContext context) {
+    return ScaffoldCustom(
+      backgroundColor: color.primary,
+      body: Stack(
+        children: [
+          ValueListenableBuilder<bool>(
+            valueListenable: isScrollingNotifier,
+            builder: (context, isScrolling, child) {
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeInOut,
+                decoration: BoxDecoration(
+                  gradient: isScrolling
+                      ? null
+                      : LinearGradient(
+                          begin: Alignment.topRight,
+                          end: Alignment.topLeft,
+                          colors: [Color(0xFF1C6585), Color(0xFF62B6CB)],
+                        ),
+                ),
+              );
+            },
+          ),
+          NestedScrollView(
+            controller: _scrollController,
+            physics: const BouncingScrollPhysics(),
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return [
+                ValueListenableBuilder<bool>(
+                  valueListenable: isScrollingNotifier,
+                  builder: (context, isScrolling, child) {
+                    return SliverAppBar(
+                      backgroundColor: isScrolling
+                          ? color.surfaceContainerLowest
+                          : Colors.transparent,
+                    expandedHeight: 90,
+                      pinned: true,
+                      elevation: 0,
+                      centerTitle: true,
+                      scrolledUnderElevation: 0.8,
+                      surfaceTintColor: color.surfaceContainerLowest,
+                      shadowColor: color.shadow.withValues(alpha: 0.5),
+                      title: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 250),
+                        opacity: isScrolling ? 1 : 0,
+                        child: Text(
+                          "Sidipo Apps".toUpperCase(),
+                          style: textStyle.titleMedium?.copyWith(
+                            color: color.primary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: Container(
+                          padding: const EdgeInsets.only(top: 40, bottom: 8),
+                          alignment: Alignment.bottomLeft,
+                          child: UserGreeting(
+                            username: _getUsername(),
+                            color: color,
+                            textStyle: textStyle,
+                            onAvatarTap: () {},
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ];
+            },
+
+            body: Container(
+              decoration: BoxDecoration(
+                color: color.surface,
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
+              ),
+              child: ListView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 20,
+                ),
+                children: [
+                  TitleAction(
+                    color: color,
+                    textStyle: textStyle,
+                    mainTitle: 'Dashboard',
+                    onLogoutPressed: () => _showLogoutConfirmation(),
+                  ),
+                  const SizedBox(height: 14),
+                  HealthStatCard(
+                    color: color,
+                    textStyle: textStyle,
+                    itemsData: [
+                      {
+                        'title': 'Ibu Hamil & Nifas',
+                        'percentage': 6,
+                        'count': 350,
+                        'trend': 'down',
+                      },
+                      {
+                        'title': 'Balita atau Bayi',
+                        'percentage': 10,
+                        'count': 550,
+                        'trend': 'up',
+                      },
+                      {
+                        'title': 'Remaja atau Sekolah',
+                        'percentage': 5,
+                        'count': 200,
+                        'trend': 'up',
+                      },
+                      {
+                        'title': 'Dewasa',
+                        'percentage': 0,
+                        'count': 300,
+                        'trend': 'flat',
+                      },
+                      {
+                        'title': 'Lansia',
+                        'percentage': 8,
+                        'count': 870,
+                        'trend': 'up',
+                      },
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+
+                  TitleAction(
+                    color: color,
+                    textStyle: textStyle,
+                    mainTitle: 'Layanan Kesehatan',
+                    showAction: false,
+                  ),
+                  const SizedBox(height: 14),
+                  HealthServiceGrid(
+                    color: color,
+                    textStyle: textStyle,
+                    items: ServiceItem.defaultItems(),
+                  ),
+                  const SizedBox(height: 30),
+
+                  TitleAction(
+                    mainTitle: 'Riwayat Pemeriksaan',
+                    color: color,
+                    textStyle: textStyle,
+                    showAction: false,
+                  ),
+                  const SizedBox(height: 14),
+                  EmptyState(
+                    color: color,
+                    textStyle: textStyle,
+                    imagePath: 'assets/image/empty_box.png',
+                    mainTitle: 'Belum Ada Riwayat',
+                    description: 'Data riwayat pemeriksaan belum tersedia, silahkan lakukan pemeriksaan terlebih dahulu.',
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

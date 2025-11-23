@@ -27,59 +27,63 @@ class _NavigationScreenState extends State<NavigationScreen> {
             0 => const HomeScreen(),
             _ => const HomeScreen(),
           },
-          bottomNavigationBar: SalomonBottomBar(
-            margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
-            backgroundColor: Theme.of(
-              context,
-            ).colorScheme.surfaceContainerLowest,
-            currentIndex: nav.selectedIndex,
-            onTap: (i) => nav.setSelectedIndex(i),
-            items: [
-              SalomonBottomBarItem(
-                icon: Icon(Icons.explore_outlined, size: 28),
-                title: Text(
-                  "Beranda",
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+          bottomNavigationBar: Material(
+            elevation: 1.1,
+            color: Theme.of(context).colorScheme.shadow,
+            child: SalomonBottomBar(
+              margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
+              backgroundColor: Theme.of(
+                context,
+              ).colorScheme.surfaceContainerLowest,
+              currentIndex: nav.selectedIndex,
+              onTap: (i) => nav.setSelectedIndex(i),
+              items: [
+                SalomonBottomBarItem(
+                  icon: Icon(Icons.explore_outlined, size: 28),
+                  title: Text(
+                    "Beranda",
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                  ),
+                  selectedColor: Theme.of(context).colorScheme.primary,
+                  unselectedColor: Theme.of(context).colorScheme.secondary,
                 ),
-                selectedColor: Theme.of(context).colorScheme.primary,
-                unselectedColor: Theme.of(context).colorScheme.secondary,
-              ),
-              SalomonBottomBarItem(
-                icon: Icon(Icons.health_and_safety_outlined, size: 28),
-                title: Text(
-                  "Pemeriksaan",
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                SalomonBottomBarItem(
+                  icon: Icon(Icons.health_and_safety_outlined, size: 28),
+                  title: Text(
+                    "Pemeriksaan",
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                  ),
+                  selectedColor: Theme.of(context).colorScheme.primary,
+                  unselectedColor: Theme.of(context).colorScheme.secondary,
                 ),
-                selectedColor: Theme.of(context).colorScheme.primary,
-                unselectedColor: Theme.of(context).colorScheme.secondary,
-              ),
-              SalomonBottomBarItem(
-                icon: Icon(Icons.history_outlined, size: 28),
-                title: Text(
-                  "Warga",
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                SalomonBottomBarItem(
+                  icon: Icon(Icons.history_outlined, size: 28),
+                  title: Text(
+                    "Warga",
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                  ),
+                  selectedColor: Theme.of(context).colorScheme.primary,
+                  unselectedColor: Theme.of(context).colorScheme.secondary,
                 ),
-                selectedColor: Theme.of(context).colorScheme.primary,
-                unselectedColor: Theme.of(context).colorScheme.secondary,
-              ),
-              SalomonBottomBarItem(
-                icon: Icon(Icons.account_circle_outlined, size: 28),
-                title: Text(
-                  "Profile",
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                SalomonBottomBarItem(
+                  icon: Icon(Icons.account_circle_outlined, size: 28),
+                  title: Text(
+                    "Profile",
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                  ),
+                  selectedColor: Theme.of(context).colorScheme.primary,
+                  unselectedColor: Theme.of(context).colorScheme.secondary,
                 ),
-                selectedColor: Theme.of(context).colorScheme.primary,
-                unselectedColor: Theme.of(context).colorScheme.secondary,
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
