@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:posyandu_digital_app/provider/firebase_auth_provider.dart';
 import 'package:posyandu_digital_app/provider/shared_preference_provider.dart';
 import 'package:posyandu_digital_app/ui/widget/main/bottom_sheet.dart';
+import 'package:posyandu_digital_app/ui/widget/main/empty_state.dart';
 import 'package:posyandu_digital_app/ui/widget/main/health_service_grid.dart';
 import 'package:posyandu_digital_app/ui/widget/main/health_stat_card.dart';
 import 'package:posyandu_digital_app/ui/widget/main/service_item.dart';
@@ -145,11 +146,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       backgroundColor: isScrolling
                           ? color.surfaceContainerLowest
                           : Colors.transparent,
-                      expandedHeight: 90,
+                    expandedHeight: 90,
                       pinned: true,
                       elevation: 0,
                       centerTitle: true,
-                      scrolledUnderElevation: 0,
+                      scrolledUnderElevation: 0.8,
+                      surfaceTintColor: color.surfaceContainerLowest,
+                      shadowColor: color.shadow.withValues(alpha: 0.5),
                       title: AnimatedOpacity(
                         duration: const Duration(milliseconds: 250),
                         opacity: isScrolling ? 1 : 0,
@@ -248,6 +251,22 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: color,
                     textStyle: textStyle,
                     items: ServiceItem.defaultItems(),
+                  ),
+                  const SizedBox(height: 30),
+
+                  TitleAction(
+                    mainTitle: 'Riwayat Pemeriksaan',
+                    color: color,
+                    textStyle: textStyle,
+                    showAction: false,
+                  ),
+                  const SizedBox(height: 14),
+                  EmptyState(
+                    color: color,
+                    textStyle: textStyle,
+                    imagePath: 'assets/image/empty_box.png',
+                    mainTitle: 'Belum Ada Riwayat',
+                    description: 'Data riwayat pemeriksaan belum tersedia, silahkan lakukan pemeriksaan terlebih dahulu.',
                   ),
                 ],
               ),
