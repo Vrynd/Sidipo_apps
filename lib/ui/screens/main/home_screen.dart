@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:posyandu_digital_app/provider/firebase_auth_provider.dart';
 import 'package:posyandu_digital_app/provider/shared_preference_provider.dart';
 import 'package:posyandu_digital_app/ui/widget/main/bottom_sheet.dart';
+import 'package:posyandu_digital_app/ui/widget/main/health_service_grid.dart';
 import 'package:posyandu_digital_app/ui/widget/main/health_stat_card.dart';
+import 'package:posyandu_digital_app/ui/widget/main/service_item.dart';
 import 'package:posyandu_digital_app/ui/widget/main/title_action.dart';
 import 'package:posyandu_digital_app/ui/widget/main/user_greeting.dart';
 import 'package:posyandu_digital_app/utils/routes/navigation.dart';
@@ -232,6 +234,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         'trend': 'up',
                       },
                     ],
+                  ),
+                  const SizedBox(height: 30),
+
+                  TitleAction(
+                    color: color,
+                    textStyle: textStyle,
+                    mainTitle: 'Layanan Kesehatan',
+                    showAction: false,
+                  ),
+                  const SizedBox(height: 14),
+                  HealthServiceGrid(
+                    color: color,
+                    textStyle: textStyle,
+                    items: ServiceItem.defaultItems(),
                   ),
                 ],
               ),
