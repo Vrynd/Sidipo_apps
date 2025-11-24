@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:posyandu_digital_app/provider/firebase_auth_provider.dart';
 import 'package:posyandu_digital_app/provider/shared_preference_provider.dart';
 import 'package:posyandu_digital_app/ui/widget/main/bottom_sheet.dart';
-import 'package:posyandu_digital_app/ui/widget/main/empty_state.dart';
 import 'package:posyandu_digital_app/ui/widget/main/health_service_grid.dart';
 import 'package:posyandu_digital_app/ui/widget/main/health_stat_card.dart';
 import 'package:posyandu_digital_app/ui/widget/main/service_item.dart';
@@ -146,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       backgroundColor: isScrolling
                           ? color.surfaceContainerLowest
                           : Colors.transparent,
-                    expandedHeight: 90,
+                      expandedHeight: 90,
                       pinned: true,
                       elevation: 0,
                       centerTitle: true,
@@ -210,13 +209,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         'title': 'Ibu Hamil & Nifas',
                         'percentage': 6,
                         'count': 350,
+                        'newCount': -20,
                         'trend': 'down',
                       },
                       {
                         'title': 'Balita atau Bayi',
                         'percentage': 10,
                         'count': 550,
+                        'newCount': 10,
                         'trend': 'up',
+
                       },
                       {
                         'title': 'Remaja atau Sekolah',
@@ -251,22 +253,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: color,
                     textStyle: textStyle,
                     items: ServiceItem.defaultItems(),
-                  ),
-                  const SizedBox(height: 30),
-
-                  TitleAction(
-                    mainTitle: 'Riwayat Pemeriksaan',
-                    color: color,
-                    textStyle: textStyle,
-                    showAction: false,
-                  ),
-                  const SizedBox(height: 14),
-                  EmptyState(
-                    color: color,
-                    textStyle: textStyle,
-                    imagePath: 'assets/image/empty_box.png',
-                    mainTitle: 'Belum Ada Riwayat',
-                    description: 'Data riwayat pemeriksaan belum tersedia, silahkan lakukan pemeriksaan terlebih dahulu.',
                   ),
                 ],
               ),
