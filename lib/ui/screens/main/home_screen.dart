@@ -3,7 +3,7 @@ import 'package:posyandu_digital_app/provider/firebase_auth_provider.dart';
 import 'package:posyandu_digital_app/provider/shared_preference_provider.dart';
 import 'package:posyandu_digital_app/ui/widget/main/bottom_sheet.dart';
 import 'package:posyandu_digital_app/ui/widget/main/health_service_grid.dart';
-import 'package:posyandu_digital_app/ui/widget/main/health_stat_card.dart';
+import 'package:posyandu_digital_app/ui/widget/main/recap_participant.dart';
 import 'package:posyandu_digital_app/ui/widget/main/service_item.dart';
 import 'package:posyandu_digital_app/ui/widget/main/title_action.dart';
 import 'package:posyandu_digital_app/ui/widget/main/user_greeting.dart';
@@ -201,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onLogoutPressed: () => _showLogoutConfirmation(),
                   ),
                   const SizedBox(height: 14),
-                  HealthStatCard(
+                  RecapParticipant(
                     color: color,
                     textStyle: textStyle,
                     itemsData: [
@@ -211,6 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         'count': 350,
                         'newCount': -20,
                         'trend': 'down',
+
                       },
                       {
                         'title': 'Balita atau Bayi',

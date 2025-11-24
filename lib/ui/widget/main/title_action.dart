@@ -25,7 +25,7 @@ class TitleAction extends StatelessWidget {
         Text(
           mainTitle,
           style: textStyle.titleMedium?.copyWith(
-            color: color.onSurfaceVariant,
+            color: color.onSurface,
             fontSize: 20.4,
             fontWeight: FontWeight.w600,
           ),
