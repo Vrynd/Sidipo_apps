@@ -1,12 +1,12 @@
 enum TrendType { up, down, flat }
 
-class HealthStatItem {
+class RecapParticipantItem {
   final String title;
   final double percentage;
   final int count;
   final TrendType trend;
 
-  HealthStatItem({
+  RecapParticipantItem({
     required this.title,
     required this.percentage,
     required this.count,
@@ -14,7 +14,7 @@ class HealthStatItem {
   });
 
   /// Factory untuk konversi dari Map
-  factory HealthStatItem.fromMap(Map<String, dynamic> map) {
+  factory RecapParticipantItem.fromMap(Map<String, dynamic> map) {
     TrendType trend;
     switch (map['trend']) {
       case 'up':
@@ -27,7 +27,7 @@ class HealthStatItem {
         trend = TrendType.flat;
     }
 
-    return HealthStatItem(
+    return RecapParticipantItem(
       title: map['title'] ?? '',
       percentage: (map['percentage'] ?? 0).toDouble(),
       count: map['count'] ?? 0,
