@@ -7,6 +7,7 @@ import 'package:posyandu_digital_app/ui/widget/main/recap_participant.dart';
 import 'package:posyandu_digital_app/ui/widget/main/service_item.dart';
 import 'package:posyandu_digital_app/ui/widget/main/title_action.dart';
 import 'package:posyandu_digital_app/ui/widget/main/user_greeting.dart';
+import 'package:posyandu_digital_app/ui/widget/main/watermark.dart';
 import 'package:posyandu_digital_app/utils/routes/navigation.dart';
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
 import 'package:provider/provider.dart';
@@ -211,7 +212,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         'count': 350,
                         'newCount': -20,
                         'trend': 'down',
-
                       },
                       {
                         'title': 'Balita atau Bayi',
@@ -219,7 +219,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         'count': 550,
                         'newCount': 10,
                         'trend': 'up',
-
                       },
                       {
                         'title': 'Remaja atau Sekolah',
@@ -255,6 +254,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     textStyle: textStyle,
                     items: ServiceItem.defaultItems(),
                   ),
+                  const SizedBox(height: 60),
+                  Watermark(
+                    color: color,
+                    textStyle: textStyle,
+                    mainTitle: 'Posyandu Digital – Versi 1.0.0',
+                    subTitle: '2025 © Pemerintah Desa Tondomulyo',
+                  ),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
