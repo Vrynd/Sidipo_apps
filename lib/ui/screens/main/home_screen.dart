@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:posyandu_digital_app/provider/firebase_auth_provider.dart';
 import 'package:posyandu_digital_app/provider/shared_preference_provider.dart';
 import 'package:posyandu_digital_app/ui/widget/main/bottom_sheet.dart';
-import 'package:posyandu_digital_app/ui/widget/main/health_service_grid.dart';
 import 'package:posyandu_digital_app/ui/widget/main/recap_participant.dart';
-import 'package:posyandu_digital_app/ui/widget/main/service_item.dart';
 import 'package:posyandu_digital_app/ui/widget/main/title_action.dart';
 import 'package:posyandu_digital_app/ui/widget/main/user_greeting.dart';
 import 'package:posyandu_digital_app/utils/routes/navigation.dart';
@@ -145,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       backgroundColor: isScrolling
                           ? color.surfaceContainerLowest
                           : Colors.transparent,
-                      expandedHeight: 90,
+                      expandedHeight: 110,
                       pinned: true,
                       elevation: 0,
                       centerTitle: true,
@@ -165,13 +163,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       flexibleSpace: FlexibleSpaceBar(
                         background: Container(
-                          padding: const EdgeInsets.only(top: 40, bottom: 8),
+                          padding: const EdgeInsets.only(top: 35, bottom: 15),
                           alignment: Alignment.bottomLeft,
                           child: UserGreeting(
                             username: _getUsername(),
                             color: color,
                             textStyle: textStyle,
-                            onAvatarTap: () {},
+                            logOutPressed: () => _showLogoutConfirmation(),
+                            syncPressed: () {},
                           ),
                         ),
                       ),
@@ -197,8 +196,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   TitleAction(
                     color: color,
                     textStyle: textStyle,
-                    mainTitle: 'Dashboard',
-                    onLogoutPressed: () => _showLogoutConfirmation(),
+                    mainTitle: 'Rekap Data',
+                    showAction: true,
                   ),
                   const SizedBox(height: 14),
                   RecapParticipant(
@@ -211,7 +210,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         'count': 350,
                         'newCount': -20,
                         'trend': 'down',
-
                       },
                       {
                         'title': 'Balita atau Bayi',
@@ -219,7 +217,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         'count': 550,
                         'newCount': 10,
                         'trend': 'up',
-
                       },
                       {
                         'title': 'Remaja atau Sekolah',
@@ -241,19 +238,33 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ],
                   ),
-                  const SizedBox(height: 30),
-
-                  TitleAction(
-                    color: color,
-                    textStyle: textStyle,
-                    mainTitle: 'Layanan Kesehatan',
-                    showAction: false,
-                  ),
-                  const SizedBox(height: 14),
-                  HealthServiceGrid(
-                    color: color,
-                    textStyle: textStyle,
-                    items: ServiceItem.defaultItems(),
+                  const SizedBox(height: 80),
+                  Center(
+                    child: Column(
+                      spacing: 2,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Posyandu Digital - Versi 1.0.0'.toUpperCase(),
+                          style: textStyle.bodySmall?.copyWith(
+                            color: color.outlineVariant,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0.1,
+                            fontSize: 12.5,
+                          ),
+                        ),
+                        Text(
+                          '2025 - Pemerintahan Desa Tondomulyo'.toUpperCase(),
+                          style: textStyle.bodySmall?.copyWith(
+                            color: color.outlineVariant,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0.1,
+                            fontSize: 12.5,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

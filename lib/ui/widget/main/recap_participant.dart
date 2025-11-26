@@ -32,8 +32,8 @@ class _RecapParticipantState extends State<RecapParticipant> {
     // Menentukan item yang ditampilkan berdasarkan status isExpanded
     List<RecapParticipantItem> displayItems = isExpanded
         ? items
-        : items.length > 3
-        ? items.sublist(0, 3)
+        : items.length > 4
+        ? items.sublist(0, 4)
         : items;
 
     return Container(
@@ -45,9 +45,6 @@ class _RecapParticipantState extends State<RecapParticipant> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Header Recap
-          _RecapHeader(color: widget.color, textStyle: widget.textStyle),
-
           // List data hasil dari mapping
           ...List.generate(displayItems.length, (index) {
             final item = displayItems[index];
@@ -77,7 +74,7 @@ class _RecapParticipantState extends State<RecapParticipant> {
               children: [
                 ListTile(
                   dense: true,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 1),
                   title: Text(
                     item.title,
                     style: widget.textStyle.titleSmall?.copyWith(
@@ -105,9 +102,7 @@ class _RecapParticipantState extends State<RecapParticipant> {
                       horizontal: 10.5,
                     ),
                     decoration: BoxDecoration(
-                      color: widget.color.surfaceContainerHigh.withValues(
-                        alpha: .4,
-                      ),
+                      color: widget.color.surfaceContainerLow,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: widget.color.surfaceContainerHigh.withValues(
@@ -119,14 +114,13 @@ class _RecapParticipantState extends State<RecapParticipant> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Icon(Icons.people_rounded, size: 20),
+                        Icon(Icons.people_outline_rounded, size: 20, color: widget.color.secondary,),
                         const SizedBox(width: 6),
                         Text(
                           '${item.count}',
-                          style: widget.textStyle.bodyMedium?.copyWith(
+                          style: widget.textStyle.bodyLarge?.copyWith(
                             color: widget.color.outline,
                             fontWeight: FontWeight.w500,
-                            fontSize: 15.5
                           ),
                         ),
                       ],
@@ -141,8 +135,8 @@ class _RecapParticipantState extends State<RecapParticipant> {
             );
           }),
 
-          // Tombol expand/collapse jika jumlah item lebih dari 3
-          if (items.length > 3)
+          // Tombol expand/collapse jika jumlah item lebih dari 4
+          if (items.length > 4)
             _RecapFooter(
               isExpanded: isExpanded,
               onTap: () => setState(() => isExpanded = !isExpanded),
@@ -181,45 +175,6 @@ class RecapDivider extends StatelessWidget {
   }
 }
 
-// Widget yang berisi judul dan subjudul informasi
-class _RecapHeader extends StatelessWidget {
-  final ColorScheme color;
-  final TextTheme textStyle;
-
-  const _RecapHeader({required this.color, required this.textStyle});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          dense: true,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 2,
-          ),
-          title: Text(
-            "Rekap Peserta",
-            style: textStyle.titleMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: color.onSurfaceVariant,
-            ),
-          ),
-          subtitle: Text(
-            "Berdasarkan sasaran pelayanan",
-            style: textStyle.bodyMedium?.copyWith(
-              color: color.outline.withValues(alpha: .8),
-              fontWeight: FontWeight.w500,
-              fontSize: 15.4,
-            ),
-          ),
-        ),
-        RecapDivider(color: color.outlineVariant, indent: 16),
-      ],
-    );
-  }
-}
-
 // Widget untuk memperluas atau menutup daftar item
 class _RecapFooter extends StatelessWidget {
   final bool isExpanded;
@@ -238,7 +193,7 @@ class _RecapFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        RecapDivider(color: color.outlineVariant, indent: 16),
+        RecapDivider(color: color.outlineVariant),
         ListTile(
           dense: true,
           contentPadding: const EdgeInsets.symmetric(
