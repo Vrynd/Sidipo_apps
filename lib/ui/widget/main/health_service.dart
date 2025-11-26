@@ -1,35 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:posyandu_digital_app/ui/widget/main/service_item.dart';
+import 'package:posyandu_digital_app/models/service_item.dart';
 
-class HealthServiceGrid extends StatelessWidget {
-  final List<ServiceItem> items;
+class HealthService extends StatelessWidget {
+  final List<ServiceItem>? items;
   final ColorScheme color;
   final TextTheme textStyle;
 
-  const HealthServiceGrid({
+  const HealthService({
     super.key,
-    required this.items,
+    this.items,
     required this.color,
     required this.textStyle,
   });
 
   @override
   Widget build(BuildContext context) {
-    const int columns = 3;
+    final data = items ?? ServiceItem.defaultItems;
 
     return GridView.builder(
       padding: const EdgeInsets.all(0),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: items.length,
+      itemCount: data.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: columns,
+        crossAxisCount: 3,
         mainAxisSpacing: 10,
         crossAxisSpacing: 10,
         childAspectRatio: 1.10,
       ),
       itemBuilder: (context, index) {
-        final item = items[index];
+        final item = data[index];
+
         return GestureDetector(
           onTap: item.onTap,
           child: Container(

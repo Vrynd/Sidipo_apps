@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:posyandu_digital_app/ui/widget/main/app_info.dart';
 import 'package:posyandu_digital_app/ui/widget/main/header.dart';
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
-import 'package:posyandu_digital_app/ui/widget/main/health_service_grid.dart';
-import 'package:posyandu_digital_app/ui/widget/main/service_item.dart';
+import 'package:posyandu_digital_app/ui/widget/main/health_service.dart';
+import 'package:posyandu_digital_app/models/service_item.dart';
 import 'package:posyandu_digital_app/ui/widget/main/title_section.dart';
 
 class ServiceScreen extends StatefulWidget {
@@ -17,6 +17,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
   // State
   final ScrollController _scrollController = ScrollController();
   final ValueNotifier<bool> isScrollingNotifier = ValueNotifier(false);
+
   // Get Theme
   ColorScheme get color => Theme.of(context).colorScheme;
   TextTheme get textStyle => Theme.of(context).textTheme;
@@ -40,6 +41,16 @@ class _ServiceScreenState extends State<ServiceScreen> {
     isScrollingNotifier.dispose();
     super.dispose();
   }
+
+  List<ServiceItem> get services => ServiceItem.defaultItems.map((item) {
+    return ServiceItem(
+      title: item.title,
+      icon: item.icon,
+      iconColor: item.iconColor,
+      backgroundColor: item.backgroundColor,
+      onTap: () {},
+    );
+  }).toList();
 
   // Build UI
   @override
@@ -136,8 +147,8 @@ class _ServiceScreenState extends State<ServiceScreen> {
                     showAction: false,
                   ),
                   const SizedBox(height: 14),
-                  HealthServiceGrid(
-                    items: ServiceItem.defaultItems(),
+                  HealthService(
+                    items: services,
                     color: color,
                     textStyle: textStyle,
                   ),
