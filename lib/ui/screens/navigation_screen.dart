@@ -4,6 +4,7 @@ import 'package:posyandu_digital_app/provider/bottom_navbar_provider.dart';
 // Custom widgets / UI
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
 import 'package:posyandu_digital_app/ui/screens/main/home_screen.dart';
+import 'package:posyandu_digital_app/ui/screens/main/service_screen.dart';
 
 // Provider
 import 'package:provider/provider.dart';
@@ -29,6 +30,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
         return ScaffoldCustom(
           body: switch (nav.selectedIndex) {
             0 => const HomeScreen(),
+            1 => const ServiceScreen(),
             _ => const HomeScreen(),
           },
           bottomNavigationBar: Material(

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class TitleAction extends StatefulWidget {
+class TitleSection extends StatefulWidget {
   final String mainTitle;
   final ColorScheme color;
   final TextTheme textStyle;
   final bool showAction;
   final ValueChanged<DateTime>? onPeriodChange;
 
-  const TitleAction({
+  const TitleSection({
     super.key,
     required this.mainTitle,
     required this.color,
@@ -17,10 +17,10 @@ class TitleAction extends StatefulWidget {
   });
 
   @override
-  State<TitleAction> createState() => _TitleActionState();
+  State<TitleSection> createState() => _TitleSectionState();
 }
 
-class _TitleActionState extends State<TitleAction> {
+class _TitleSectionState extends State<TitleSection> {
   DateTime selectedDate = DateTime.now();
   final DateTime now = DateTime.now();
 
@@ -91,7 +91,7 @@ class _TitleActionState extends State<TitleAction> {
           widget.mainTitle,
           style: widget.textStyle.titleMedium?.copyWith(
             color: widget.color.onSurface,
-            fontSize: 20.4,
+            fontSize: 21,
             fontWeight: FontWeight.w600,
           ),
         ),
