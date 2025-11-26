@@ -1,41 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:posyandu_digital_app/provider/firebase_auth_provider.dart';
-import 'package:posyandu_digital_app/provider/shared_preference_provider.dart';
 import 'package:posyandu_digital_app/ui/widget/main/app_info.dart';
-import 'package:posyandu_digital_app/ui/widget/main/bottom_sheet.dart';
 import 'package:posyandu_digital_app/ui/widget/main/header.dart';
-import 'package:posyandu_digital_app/ui/widget/main/recap_participant.dart';
+import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
+import 'package:posyandu_digital_app/ui/widget/main/health_service.dart';
+import 'package:posyandu_digital_app/models/service_item.dart';
 import 'package:posyandu_digital_app/ui/widget/main/title_section.dart';
 
-import 'package:posyandu_digital_app/utils/routes/navigation.dart';
-import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
-import 'package:provider/provider.dart';
-
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class ServiceScreen extends StatefulWidget {
+  const ServiceScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<ServiceScreen> createState() => _ServiceScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _ServiceScreenState extends State<ServiceScreen> {
   // State
   final ScrollController _scrollController = ScrollController();
   final ValueNotifier<bool> isScrollingNotifier = ValueNotifier(false);
-  String? _cachedUsername;
 
   // Get Theme
   ColorScheme get color => Theme.of(context).colorScheme;
   TextTheme get textStyle => Theme.of(context).textTheme;
-
-  // Format Username
-  String _getUsername() {
-    final fullname = _cachedUsername ?? "User";
-    final parts = fullname.split(" ");
-    if (parts.length == 1) return parts.first;
-    if (parts.length > 1) return "${parts[0]} ${parts[1]}";
-    return "User";
-  }
 
   // Lifecycle
   @override
@@ -51,62 +36,21 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final profile = context.read<FirebaseAuthProvider>().profile;
-    if (profile != null && profile.fullname != null) {
-      _cachedUsername = profile.fullname!;
-    }
-  }
-
-  @override
   void dispose() {
     _scrollController.dispose();
     isScrollingNotifier.dispose();
     super.dispose();
   }
 
-  // Function
-  Future<void> _tapToSignOut(BuildContext context) async {
-    final sharedPreferenceProvider = context.read<SharedPreferenceProvider>();
-    final firebaseAuthProvider = context.read<FirebaseAuthProvider>();
-    final navigator = Navigator.of(context);
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-
-    await firebaseAuthProvider
-        .signOutUser()
-        .then((value) async {
-          await sharedPreferenceProvider.logout();
-          navigator.pushReplacementNamed(RouteScreen.login.name);
-        })
-        .whenComplete(() {
-          scaffoldMessenger.showSnackBar(
-            SnackBar(
-              content: Text(firebaseAuthProvider.message ?? ""),
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-        });
-  }
-
-  Future<void> _showLogoutConfirmation() async {
-    final result = await showConfirmationSheet(
-      context: context,
-      color: color,
-      textStyle: textStyle,
-      title: "Konfirmasi Logout",
-      description: "Apakah Anda yakin ingin keluar dari aplikasi?",
-      confirmTitle: "Logout",
-      cancelTitle: "Batal",
-      icon: Icons.power_settings_new_rounded,
-      iconColor: color.error,
-      iconBackground: color.errorContainer,
+  List<ServiceItem> get services => ServiceItem.defaultItems.map((item) {
+    return ServiceItem(
+      title: item.title,
+      icon: item.icon,
+      iconColor: item.iconColor,
+      backgroundColor: item.backgroundColor,
+      onTap: () {},
     );
-
-    if (result == true && mounted) {
-      _tapToSignOut(context);
-    }
-  }
+  }).toList();
 
   // Build UI
   @override
@@ -156,10 +100,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         duration: const Duration(milliseconds: 250),
                         opacity: isScrolling ? 1 : 0,
                         child: Text(
-                          "Sidipo Apps".toUpperCase(),
+                          "Layanan Kesehatan",
                           style: textStyle.titleMedium?.copyWith(
-                            color: color.primary,
-                            fontWeight: FontWeight.w600,
+                            color: color.onSurface,
+                            fontSize: 19.5,
                           ),
                         ),
                       ),
@@ -168,11 +112,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: const EdgeInsets.only(top: 40, bottom: 15),
                           alignment: Alignment.bottomLeft,
                           child: Header(
-                            mainTitle: _getUsername(),
+                            mainTitle: 'Layanan Kesehatan',
+                            subTitle: '5 Layanan Tersedia',
                             color: color,
                             textStyle: textStyle,
-                            onLogout: _showLogoutConfirmation,
-                            onSync: () {},
+                            showActions: false,
+                            useGreeting: false,
                           ),
                         ),
                       ),
@@ -198,47 +143,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   TitleSection(
                     color: color,
                     textStyle: textStyle,
-                    mainTitle: 'Rekap Data',
-                    showAction: true,
+                    mainTitle: 'Pilih Layanan',
+                    showAction: false,
                   ),
                   const SizedBox(height: 14),
-                  RecapParticipant(
+                  HealthService(
+                    items: services,
                     color: color,
                     textStyle: textStyle,
-                    itemsData: [
-                      {
-                        'title': 'Ibu Hamil & Nifas',
-                        'percentage': 6,
-                        'count': 350,
-                        'newCount': -20,
-                        'trend': 'down',
-                      },
-                      {
-                        'title': 'Balita atau Bayi',
-                        'percentage': 10,
-                        'count': 550,
-                        'newCount': 10,
-                        'trend': 'up',
-                      },
-                      {
-                        'title': 'Remaja atau Sekolah',
-                        'percentage': 5,
-                        'count': 200,
-                        'trend': 'up',
-                      },
-                      {
-                        'title': 'Dewasa',
-                        'percentage': 0,
-                        'count': 300,
-                        'trend': 'flat',
-                      },
-                      {
-                        'title': 'Lansia',
-                        'percentage': 8,
-                        'count': 870,
-                        'trend': 'up',
-                      },
-                    ],
                   ),
                   const SizedBox(height: 80),
                   AppInfo(
