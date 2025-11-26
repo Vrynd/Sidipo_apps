@@ -18,6 +18,10 @@ class NavigationScreen extends StatefulWidget {
 }
 
 class _NavigationScreenState extends State<NavigationScreen> {
+  // Get Theme
+  ColorScheme get color => Theme.of(context).colorScheme;
+  TextTheme get textStyle => Theme.of(context).textTheme;
+
   @override
   Widget build(BuildContext context) {
     return Consumer<BottomNavBarProvider>(
@@ -29,7 +33,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
           },
           bottomNavigationBar: Material(
             elevation: 1.1,
-            color: Theme.of(context).colorScheme.shadow,
+            color: color.shadow,
             child: SalomonBottomBar(
               margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
               backgroundColor: Theme.of(
@@ -39,34 +43,34 @@ class _NavigationScreenState extends State<NavigationScreen> {
               onTap: (i) => nav.setSelectedIndex(i),
               items: [
                 SalomonBottomBarItem(
-                  icon: Icon(Icons.explore_outlined, size: 28),
+                  icon: Icon(Icons.dashboard_outlined, size: 28),
                   title: Text(
-                    "Beranda",
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                    "Dashboard",
+                    style: textStyle.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  selectedColor: Theme.of(context).colorScheme.primary,
-                  unselectedColor: Theme.of(context).colorScheme.secondary,
+                  selectedColor: color.primary,
+                  unselectedColor: color.secondary,
                 ),
                 SalomonBottomBarItem(
-                  icon: Icon(Icons.health_and_safety_outlined, size: 28),
+                  icon: Icon(Icons.monitor_heart_outlined, size: 28),
                   title: Text(
-                    "Pemeriksaan",
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                    "Layanan",
+                    style: textStyle.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  selectedColor: Theme.of(context).colorScheme.primary,
-                  unselectedColor: Theme.of(context).colorScheme.secondary,
+                  selectedColor: color.primary,
+                  unselectedColor: color.secondary,
                 ),
                 SalomonBottomBarItem(
                   icon: Icon(Icons.history_outlined, size: 28),
                   title: Text(
                     "Warga",
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   selectedColor: Theme.of(context).colorScheme.primary,
                   unselectedColor: Theme.of(context).colorScheme.secondary,
@@ -75,9 +79,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
                   icon: Icon(Icons.account_circle_outlined, size: 28),
                   title: Text(
                     "Profile",
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   selectedColor: Theme.of(context).colorScheme.primary,
                   unselectedColor: Theme.of(context).colorScheme.secondary,
