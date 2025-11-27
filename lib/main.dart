@@ -10,7 +10,7 @@ import 'package:posyandu_digital_app/provider/bottom_navbar_provider.dart';
 import 'package:posyandu_digital_app/provider/firebase_auth_provider.dart';
 import 'package:posyandu_digital_app/provider/shared_preference_provider.dart';
 import 'package:posyandu_digital_app/provider/show_password_provider.dart';
-import 'package:posyandu_digital_app/ui/screens/main/detail_service_screen.dart';
+import 'package:posyandu_digital_app/ui/screens/main/timeline_screen.dart';
 // Routes
 import 'package:posyandu_digital_app/utils/routes/navigation.dart';
 // Service
@@ -72,10 +72,10 @@ class MyApp extends StatelessWidget {
         RouteScreen.forgotPassword.name: (context) =>
             const ForgotPasswordScreen(),
         RouteScreen.home.name: (context) => const NavigationScreen(),
-        RouteScreen.detailService.name: (context) {
+        RouteScreen.timelineService.name: (context) {
           final service =
               ModalRoute.of(context)!.settings.arguments as ServiceItem;
-          return DetailServiceScreen(service: service);
+          return TimelineScreen(service: service);
         },
       },
     );

@@ -54,10 +54,9 @@ class _ServiceScreenState extends State<ServiceScreen> {
   }).toList();
 
   void _goToDetail(ServiceItem item) {
-    debugPrint('Go to detail ${item.title}');
     Navigator.pushNamed(
       context,
-      RouteScreen.detailService.name,
+      RouteScreen.timelineService.name,
       arguments: item,
     );
   }
