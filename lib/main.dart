@@ -4,11 +4,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 // Firebase config
 import 'package:posyandu_digital_app/firebase_options.dart';
+import 'package:posyandu_digital_app/models/service_item.dart';
 // Provider
 import 'package:posyandu_digital_app/provider/bottom_navbar_provider.dart';
 import 'package:posyandu_digital_app/provider/firebase_auth_provider.dart';
 import 'package:posyandu_digital_app/provider/shared_preference_provider.dart';
 import 'package:posyandu_digital_app/provider/show_password_provider.dart';
+import 'package:posyandu_digital_app/ui/screens/main/detail_service_screen.dart';
 // Routes
 import 'package:posyandu_digital_app/utils/routes/navigation.dart';
 // Service
@@ -70,6 +72,11 @@ class MyApp extends StatelessWidget {
         RouteScreen.forgotPassword.name: (context) =>
             const ForgotPasswordScreen(),
         RouteScreen.home.name: (context) => const NavigationScreen(),
+        RouteScreen.detailService.name: (context) {
+          final service =
+              ModalRoute.of(context)!.settings.arguments as ServiceItem;
+          return DetailServiceScreen(service: service);
+        },
       },
     );
   }

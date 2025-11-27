@@ -3,7 +3,8 @@ enum RouteScreen {
   register('register'),
   forgotPassword('forgot-password'),
   home('home'),
-  profile('profile');
+  profile('profile'),
+  detailService('detail-service');
 
   final String name;
   const RouteScreen(this.name);

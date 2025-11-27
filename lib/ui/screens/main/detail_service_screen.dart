@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:posyandu_digital_app/ui/widget/main/app_info.dart';
-import 'package:posyandu_digital_app/ui/widget/main/header.dart';
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
-import 'package:posyandu_digital_app/ui/widget/main/health_service.dart';
 import 'package:posyandu_digital_app/models/service_item.dart';
+import 'package:posyandu_digital_app/ui/widget/main/header_detail.dart';
 import 'package:posyandu_digital_app/ui/widget/main/title_section.dart';
-import 'package:posyandu_digital_app/utils/routes/navigation.dart';
 
-class ServiceScreen extends StatefulWidget {
-  const ServiceScreen({super.key});
+class DetailServiceScreen extends StatefulWidget {
+  final ServiceItem service;
+  const DetailServiceScreen({super.key, required this.service});
 
   @override
-  State<ServiceScreen> createState() => _ServiceScreenState();
+  State<DetailServiceScreen> createState() => _DetailServiceScreenState();
 }
 
-class _ServiceScreenState extends State<ServiceScreen> {
-  // State
+class _DetailServiceScreenState extends State<DetailServiceScreen> {
+  // Variable
+  late final ServiceItem service;
   final ScrollController _scrollController = ScrollController();
   final ValueNotifier<bool> isScrollingNotifier = ValueNotifier(false);
 
@@ -27,6 +26,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
   @override
   void initState() {
     super.initState();
+    service = widget.service;
     _scrollController.addListener(() {
       if (_scrollController.offset > 10) {
         isScrollingNotifier.value = true;
@@ -41,25 +41,6 @@ class _ServiceScreenState extends State<ServiceScreen> {
     _scrollController.dispose();
     isScrollingNotifier.dispose();
     super.dispose();
-  }
-
-  List<ServiceItem> get services => ServiceItem.defaultItems.map((item) {
-    return ServiceItem(
-      title: item.title,
-      icon: item.icon,
-      iconColor: item.iconColor,
-      backgroundColor: item.backgroundColor,
-      onTap: () => _goToDetail(item),
-    );
-  }).toList();
-
-  void _goToDetail(ServiceItem item) {
-    debugPrint('Go to detail ${item.title}');
-    Navigator.pushNamed(
-      context,
-      RouteScreen.detailService.name,
-      arguments: item,
-    );
   }
 
   // Build UI
@@ -96,6 +77,17 @@ class _ServiceScreenState extends State<ServiceScreen> {
                   valueListenable: isScrollingNotifier,
                   builder: (context, isScrolling, child) {
                     return SliverAppBar(
+                      leading: isScrolling
+                          ? IconButton(
+                              onPressed: () => Navigator.pop(context),
+                              icon: Icon(
+                                Icons.arrow_back_rounded,
+                                color: color.onSurface,
+                                size: 22,
+                              ),
+                            )
+                          : const SizedBox.shrink(),
+                      leadingWidth: isScrolling ? 56 : 0,
                       backgroundColor: isScrolling
                           ? color.surfaceContainerLowest
                           : Colors.transparent,
@@ -110,24 +102,24 @@ class _ServiceScreenState extends State<ServiceScreen> {
                         duration: const Duration(milliseconds: 250),
                         opacity: isScrolling ? 1 : 0,
                         child: Text(
-                          "Layanan Kesehatan",
+                          'Layanan ${service.title}',
                           style: textStyle.titleMedium?.copyWith(
                             color: color.onSurface,
                             fontSize: 19.5,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                       flexibleSpace: FlexibleSpaceBar(
                         background: Container(
-                          padding: const EdgeInsets.only(top: 40, bottom: 15),
+                          padding: const EdgeInsets.only(top: 15, bottom: 38),
                           alignment: Alignment.bottomLeft,
-                          child: Header(
-                            mainTitle: 'Layanan Kesehatan',
-                            subTitle: '5 Layanan Tersedia',
+                          child: HeaderDetail(
                             color: color,
                             textStyle: textStyle,
-                            showActions: false,
-                            useGreeting: false,
+                            mainTitle: 'Layanan ${service.title}',
+                            showActions: true,
+                            onBack: Navigator.of(context).pop,
                           ),
                         ),
                       ),
@@ -151,23 +143,10 @@ class _ServiceScreenState extends State<ServiceScreen> {
                 ),
                 children: [
                   TitleSection(
+                    mainTitle: 'Alur Pelayanan',
                     color: color,
                     textStyle: textStyle,
-                    mainTitle: 'Pilih Layanan',
                     showAction: false,
-                  ),
-                  const SizedBox(height: 14),
-                  HealthService(
-                    items: services,
-                    color: color,
-                    textStyle: textStyle,
-                  ),
-                  const SizedBox(height: 80),
-                  AppInfo(
-                    color: color,
-                    textStyle: textStyle,
-                    title: 'Posyandu Digital - Versi 1.0.0',
-                    subTitle: '2025 - Pemerintah Desa Tondomulyo',
                   ),
                 ],
               ),
