@@ -30,7 +30,7 @@ class HeaderDetail extends StatelessWidget {
             style: IconButton.styleFrom(
               side: BorderSide(color: color.onSecondary, width: 1.1),
             ),
-            onPressed: () {},
+            onPressed:onBack,
             icon: Icon(
               Icons.arrow_back_ios_new_rounded,
               color: color.onPrimary,
@@ -53,7 +53,7 @@ class HeaderDetail extends StatelessWidget {
                 subTitle,
                 style: textStyle.titleLarge?.copyWith(
                   color: color.onPrimary,
-                  fontSize: 25,
+                  fontSize: 23,
                 ),
               ),
             ],

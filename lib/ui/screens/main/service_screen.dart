@@ -162,6 +162,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
                     textStyle: textStyle,
                   ),
                   const SizedBox(height: 80),
+
                   AppInfo(
                     color: color,
                     textStyle: textStyle,
