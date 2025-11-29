@@ -1,57 +1,42 @@
 import 'package:flutter/material.dart';
 
-class ServiceItem {
+class HealthServiceItem {
+  final List<Color> gradient;
   final String title;
-  final IconData icon;
-  final VoidCallback? onTap;
-  final Color iconColor;
-  final Color backgroundColor;
+  final String subtitle;
 
-  ServiceItem({
+  HealthServiceItem({
+    required this.gradient,
     required this.title,
-    required this.icon,
-    required this.iconColor,
-    required this.backgroundColor,
-    this.onTap,
+    required this.subtitle,
   });
 
-  // Daftar menu default
-  static List<ServiceItem> get defaultItems => [
-    ServiceItem(
-      title: 'Ibu Hamil',
-      icon: Icons.pregnant_woman,
-      iconColor: Colors.pink,
-      backgroundColor: Colors.pink.shade100,
+  // Contoh data default
+  static List<HealthServiceItem> defaultItems = [
+    HealthServiceItem(
+      gradient: [Color(0xFFEEDAFF), Color(0xFFFFCDE7)],
+      title: "Ibu Hamil & Nifas",
+      subtitle: "Pemeriksaan kehamilan & konseling",
     ),
-    ServiceItem(
-      title: 'Balita',
-      icon: Icons.child_care,
-      iconColor: Colors.blue,
-      backgroundColor: Colors.blue.shade100,
+    HealthServiceItem(
+      gradient: [Color(0xFFFFF7E7), Color(0xFFB8E2FF)],
+      title: "Bayi atau Balita",
+      subtitle: "Imunisasi Dasar Lengkap",
     ),
-    ServiceItem(
-      title: 'Remaja',
-      icon: Icons.school,
-      iconColor: Colors.orange,
-      backgroundColor: Colors.orange.shade100,
+    HealthServiceItem(
+      gradient: [Color(0xFFFFE4C7), Color(0xFFC7E3FF)],
+      title: "Usia Remaja",
+      subtitle: "Skrining status gizi, tinggi & berat badan",
     ),
-    ServiceItem(
-      title: 'Dewasa',
-      icon: Icons.work,
-      iconColor: Colors.green,
-      backgroundColor: Colors.green.shade100,
+    HealthServiceItem(
+      gradient: [Color(0xFFE4F1F4), Color(0xFFA8E4D7)],
+      title: "Usia Dewasa",
+      subtitle: "Skrining penyakit tidak menular",
     ),
-    ServiceItem(
-      title: 'Lansia',
-      icon: Icons.elderly,
-      iconColor: Colors.purple,
-      backgroundColor: Colors.purple.shade100,
-    ),
-    ServiceItem(
-      title: 'Lainnya',
-      icon: Icons.more_horiz,
-      iconColor: Colors.grey,
-      backgroundColor: Colors.grey.shade300,
+    HealthServiceItem(
+      gradient: [Color(0xFFDDEEC9), Color(0xFFA6D9A8)],
+      title: "Usia Lansia",
+      subtitle: "Pemeriksaan rutin tekanan darah",
     ),
   ];
 }

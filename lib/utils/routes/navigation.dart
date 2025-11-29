@@ -4,7 +4,7 @@ enum RouteScreen {
   forgotPassword('forgot-password'),
   home('home'),
   profile('profile'),
-  detailService('detail-service');
+  timelineService('timeline-service');
 
   final String name;
   const RouteScreen(this.name);

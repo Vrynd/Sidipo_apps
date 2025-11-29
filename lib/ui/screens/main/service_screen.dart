@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:posyandu_digital_app/ui/widget/main/app_info.dart';
 import 'package:posyandu_digital_app/ui/widget/main/header.dart';
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
-import 'package:posyandu_digital_app/ui/widget/main/health_service.dart';
+// import 'package:posyandu_digital_app/ui/widget/main/health_service.dart';
 import 'package:posyandu_digital_app/models/service_item.dart';
+import 'package:posyandu_digital_app/ui/widget/main/health_service.dart';
 import 'package:posyandu_digital_app/ui/widget/main/title_section.dart';
 import 'package:posyandu_digital_app/utils/routes/navigation.dart';
 
@@ -18,6 +18,8 @@ class _ServiceScreenState extends State<ServiceScreen> {
   // State
   final ScrollController _scrollController = ScrollController();
   final ValueNotifier<bool> isScrollingNotifier = ValueNotifier(false);
+
+  bool cardsClosed = false;
 
   // Get Theme
   ColorScheme get color => Theme.of(context).colorScheme;
@@ -43,24 +45,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
     super.dispose();
   }
 
-  List<ServiceItem> get services => ServiceItem.defaultItems.map((item) {
-    return ServiceItem(
-      title: item.title,
-      icon: item.icon,
-      iconColor: item.iconColor,
-      backgroundColor: item.backgroundColor,
-      onTap: () => _goToDetail(item),
-    );
-  }).toList();
-
-  void _goToDetail(ServiceItem item) {
-    debugPrint('Go to detail ${item.title}');
-    Navigator.pushNamed(
-      context,
-      RouteScreen.detailService.name,
-      arguments: item,
-    );
-  }
+  List<HealthServiceItem> get serviceList => HealthServiceItem.defaultItems;
 
   // Build UI
   @override
@@ -154,20 +139,25 @@ class _ServiceScreenState extends State<ServiceScreen> {
                     color: color,
                     textStyle: textStyle,
                     mainTitle: 'Pilih Layanan',
-                    showAction: false,
+                    actionType: TitleActionType.toggle,
+                    toggleValue: cardsClosed,
+                    onToggle: (newValue) {
+                      setState(() {
+                        cardsClosed = newValue;
+                      });
+                    },
                   ),
                   const SizedBox(height: 14),
-                  HealthService(
-                    items: services,
-                    color: color,
-                    textStyle: textStyle,
-                  ),
-                  const SizedBox(height: 80),
-                  AppInfo(
-                    color: color,
-                    textStyle: textStyle,
-                    title: 'Posyandu Digital - Versi 1.0.0',
-                    subTitle: '2025 - Pemerintah Desa Tondomulyo',
+                  StackedServiceCards(
+                    services: serviceList,
+                    isClosed: cardsClosed,
+                    onCardTap: (service) {
+                      Navigator.pushNamed(
+                        context,
+                        RouteScreen.timelineService.name,
+                        arguments: service,
+                      );
+                    },
                   ),
                 ],
               ),

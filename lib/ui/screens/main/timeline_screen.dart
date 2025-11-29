@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
 import 'package:posyandu_digital_app/models/service_item.dart';
 import 'package:posyandu_digital_app/ui/widget/main/header_detail.dart';
+import 'package:posyandu_digital_app/ui/widget/main/timeline_service.dart';
 import 'package:posyandu_digital_app/ui/widget/main/title_section.dart';
 
-class DetailServiceScreen extends StatefulWidget {
-  final ServiceItem service;
-  const DetailServiceScreen({super.key, required this.service});
+class TimelineScreen extends StatefulWidget {
+  final HealthServiceItem service;
+  const TimelineScreen({super.key, required this.service});
 
   @override
-  State<DetailServiceScreen> createState() => _DetailServiceScreenState();
+  State<TimelineScreen> createState() => _TimelineScreenState();
 }
 
-class _DetailServiceScreenState extends State<DetailServiceScreen> {
+class _TimelineScreenState extends State<TimelineScreen> {
   // Variable
-  late final ServiceItem service;
+  late final HealthServiceItem service;
   final ScrollController _scrollController = ScrollController();
   final ValueNotifier<bool> isScrollingNotifier = ValueNotifier(false);
 
@@ -112,12 +113,13 @@ class _DetailServiceScreenState extends State<DetailServiceScreen> {
                       ),
                       flexibleSpace: FlexibleSpaceBar(
                         background: Container(
-                          padding: const EdgeInsets.only(top: 15, bottom: 38),
+                          padding: const EdgeInsets.only(top: 40, bottom: 15),
                           alignment: Alignment.bottomLeft,
                           child: HeaderDetail(
                             color: color,
                             textStyle: textStyle,
-                            mainTitle: 'Layanan ${service.title}',
+                            mainTitle: 'Layanan',
+                            subTitle: service.title,
                             showActions: true,
                             onBack: Navigator.of(context).pop,
                           ),
@@ -147,6 +149,44 @@ class _DetailServiceScreenState extends State<DetailServiceScreen> {
                     color: color,
                     textStyle: textStyle,
                     showAction: false,
+                  ),
+                  const SizedBox(height: 14),
+                  TimelineService(
+                    spacing: 14,
+                    steps: [
+                      TimelineItem(
+                        color: color,
+                        textStyle: textStyle,
+                        mainTitle: 'Pendaftaran',
+                        subTitle: 'Langkah 1',
+                        isFilled: false,
+                        onPressed: () {},
+                      ),
+                      TimelineItem(
+                        color: color,
+                        textStyle: textStyle,
+                        mainTitle: 'Pengukuran & Penimbangan',
+                        subTitle: 'Langkah 2',
+                        isFilled: false,
+                        onPressed: () {},
+                      ),
+                      TimelineItem(
+                        color: color,
+                        textStyle: textStyle,
+                        mainTitle: 'Pelayanan Kesehatan',
+                        subTitle: 'Langkah 3',
+                        isFilled: false,
+                        onPressed: () {},
+                      ),
+                      TimelineItem(
+                        color: color,
+                        textStyle: textStyle,
+                        mainTitle: 'Penyuluhan & Edukasi',
+                        subTitle: 'Langkah 4',
+                        isFilled: false,
+                        onPressed: () {},
+                      ),
+                    ],
                   ),
                 ],
               ),

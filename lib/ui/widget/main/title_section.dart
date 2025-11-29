@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 
+enum TitleActionType { period, toggle, custom }
+
 class TitleSection extends StatefulWidget {
   final String mainTitle;
   final ColorScheme color;
   final TextTheme textStyle;
   final bool showAction;
+  final bool? toggleValue;
+  final TitleActionType actionType;
   final ValueChanged<DateTime>? onPeriodChange;
+  final ValueChanged<bool>? onToggle;
 
   const TitleSection({
     super.key,
@@ -13,6 +18,9 @@ class TitleSection extends StatefulWidget {
     required this.color,
     required this.textStyle,
     this.showAction = true,
+    this.actionType = TitleActionType.period,
+    this.toggleValue,
+    this.onToggle,
     this.onPeriodChange,
   });
 
@@ -81,6 +89,67 @@ class _TitleSectionState extends State<TitleSection> {
     });
   }
 
+  Widget _buildAction() {
+    switch (widget.actionType) {
+      case TitleActionType.period:
+        return _buildPeriodSelector();
+
+      case TitleActionType.toggle:
+        return _buildToggleButton();
+
+      case TitleActionType.custom:
+        return const SizedBox();
+    }
+  }
+
+  Widget _buildPeriodSelector() {
+    return Row(
+      spacing: 8,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        _MonthPeriode(
+          icon: Icons.chevron_left_rounded,
+          enabled: _canGoPrev,
+          onTap: _prevMonth,
+          color: widget.color,
+        ),
+        _DisplayPeriode(
+          title: formattedPeriod,
+          textStyle: widget.textStyle,
+          color: widget.color,
+        ),
+        _MonthPeriode(
+          icon: Icons.chevron_right_rounded,
+          enabled: _canGoNext,
+          onTap: _nextMonth,
+          color: widget.color,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildToggleButton() {
+    final bool value = widget.toggleValue ?? false;
+
+    return GestureDetector(
+      onTap: () => widget.onToggle?.call(!value),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6.5),
+        decoration: BoxDecoration(
+          color: widget.color.surfaceContainerHigh,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: widget.color.outlineVariant.withValues(alpha: 0.4)),
+        ),
+        child: Icon(
+          value ? Icons.expand_less : Icons.expand_more,
+          size: 23,
+          color: widget.color.outline,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -96,31 +165,7 @@ class _TitleSectionState extends State<TitleSection> {
           ),
         ),
 
-        if (widget.showAction)
-          Row(
-            spacing: 8,
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _MonthPeriode(
-                icon: Icons.chevron_left_rounded,
-                enabled: _canGoPrev,
-                onTap: _prevMonth,
-                color: widget.color,
-              ),
-              _DisplayPeriode(
-                title: formattedPeriod,
-                textStyle: widget.textStyle,
-                color: widget.color,
-              ),
-              _MonthPeriode(
-                icon: Icons.chevron_right_rounded,
-                enabled: _canGoNext,
-                onTap: _nextMonth,
-                color: widget.color,
-              ),
-            ],
-          ),
+        if (widget.showAction) _buildAction(),
       ],
     );
   }
@@ -155,7 +200,7 @@ class _MonthPeriode extends StatelessWidget {
 
         child: Icon(
           icon,
-          size: 20,
+          size: 23,
           color: enabled
               ? color.outline
               : color.outlineVariant.withValues(alpha: (0.3)),
@@ -179,7 +224,7 @@ class _DisplayPeriode extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
         color: color.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(12),

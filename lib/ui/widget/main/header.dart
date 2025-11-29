@@ -89,7 +89,7 @@ class Header extends StatelessWidget {
           if (showActions) ...[
             IconButton.outlined(
               style: IconButton.styleFrom(
-                side: BorderSide(color: color.outlineVariant, width: 1.1),
+                side: BorderSide(color: color.onSecondary, width: 1.1),
               ),
               onPressed: onSync,
               icon: Icon(Icons.sync_rounded, color: color.onPrimary, size: 20),
@@ -97,7 +97,7 @@ class Header extends StatelessWidget {
             const SizedBox(width: 6),
             IconButton.outlined(
               style: IconButton.styleFrom(
-                side: BorderSide(color: color.outlineVariant, width: 1.1),
+                side: BorderSide(color: color.onSecondary, width: 1.1),
               ),
               onPressed: onLogout,
               icon: Icon(

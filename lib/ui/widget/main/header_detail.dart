@@ -4,6 +4,7 @@ class HeaderDetail extends StatelessWidget {
   final ColorScheme color;
   final TextTheme textStyle;
   final String mainTitle;
+  final String subTitle;
   final bool showActions;
   final VoidCallback? onBack;
 
@@ -12,6 +13,7 @@ class HeaderDetail extends StatelessWidget {
     required this.color,
     required this.textStyle,
     required this.mainTitle,
+    required this.subTitle,
     this.showActions = true,
     this.onBack,
   });
@@ -26,23 +28,40 @@ class HeaderDetail extends StatelessWidget {
         children: [
           IconButton.outlined(
             style: IconButton.styleFrom(
-              side: BorderSide(color: color.outlineVariant, width: 1.1),
+              side: BorderSide(color: color.onSecondary, width: 1.1),
             ),
-            onPressed: onBack,
-            icon: Icon(Icons.arrow_back, color: color.onPrimary, size: 22),
-          ),
-          Text(
-            mainTitle,
-            style: textStyle.titleLarge?.copyWith(
-              fontWeight: FontWeight.w600,
+            onPressed:onBack,
+            icon: Icon(
+              Icons.arrow_back_ios_new_rounded,
               color: color.onPrimary,
-              fontSize: 23,
+              size: 20,
             ),
+          ),
+          Column(
+            spacing: 2.4,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                mainTitle,
+                style: textStyle.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: color.surfaceContainerHigh,
+                ),
+              ),
+              Text(
+                subTitle,
+                style: textStyle.titleLarge?.copyWith(
+                  color: color.onPrimary,
+                  fontSize: 23,
+                ),
+              ),
+            ],
           ),
           if (showActions)
             IconButton.outlined(
               style: IconButton.styleFrom(
-                side: BorderSide(color: color.outlineVariant, width: 1.1),
+                side: BorderSide(color: color.onSecondary, width: 1.1),
               ),
               onPressed: () {},
               icon: Icon(Icons.more_horiz, color: color.onPrimary, size: 20),
