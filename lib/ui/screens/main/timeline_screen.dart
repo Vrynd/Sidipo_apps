@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:posyandu_digital_app/ui/custom/scaffold_custom.dart';
 import 'package:posyandu_digital_app/models/service_item.dart';
-import 'package:posyandu_digital_app/ui/widget/main/app_info.dart';
 import 'package:posyandu_digital_app/ui/widget/main/header_detail.dart';
 import 'package:posyandu_digital_app/ui/widget/main/timeline_service.dart';
 import 'package:posyandu_digital_app/ui/widget/main/title_section.dart';
 
 class TimelineScreen extends StatefulWidget {
-  final ServiceItem service;
+  final HealthServiceItem service;
   const TimelineScreen({super.key, required this.service});
 
   @override
@@ -16,7 +15,7 @@ class TimelineScreen extends StatefulWidget {
 
 class _TimelineScreenState extends State<TimelineScreen> {
   // Variable
-  late final ServiceItem service;
+  late final HealthServiceItem service;
   final ScrollController _scrollController = ScrollController();
   final ValueNotifier<bool> isScrollingNotifier = ValueNotifier(false);
 
@@ -188,14 +187,6 @@ class _TimelineScreenState extends State<TimelineScreen> {
                         onPressed: () {},
                       ),
                     ],
-                  ),
-                  const SizedBox(height: 80),
-
-                  AppInfo(
-                    color: color,
-                    textStyle: textStyle,
-                    title: 'Posyandu Digital - Versi 1.0.0',
-                    subTitle: '2025 - Pemerintah Desa Tondomulyo',
                   ),
                 ],
               ),

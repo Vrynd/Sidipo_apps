@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
         RouteScreen.home.name: (context) => const NavigationScreen(),
         RouteScreen.timelineService.name: (context) {
           final service =
-              ModalRoute.of(context)!.settings.arguments as ServiceItem;
+              ModalRoute.of(context)!.settings.arguments as HealthServiceItem;
           return TimelineScreen(service: service);
         },
       },
